@@ -9,21 +9,17 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    public static $admin = 'Admin';
+    public static $student = 'Student';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'dirID', 'group'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+
 }
