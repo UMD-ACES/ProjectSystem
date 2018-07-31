@@ -14,10 +14,14 @@
 - Must be in the user table to have access to the application
 
 ## Setup
-- Make sure to change the default password for the OS that this application is running on
-- Become root
-- Go to /var/www/html/ProjectSystem
-- Run "php artisan addAdminUser {directoryID}"
+1. Make sure to change the default password for the OS that this application is running on
+2. Become root
+3. Go to /var/www/html/ProjectSystem
+4. Run "php composer.phar install"
+5. Setup the DB connection in .env (may need to create a DB)
+6. Setup the CAS authentication in .env
+7. Run "php artisan migrate"
+8. Run "php artisan addAdminUser {directoryID}"
 
 ## License: MIT
 

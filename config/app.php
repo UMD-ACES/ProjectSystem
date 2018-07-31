@@ -160,6 +160,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        // Installed Packages
+        \Subfission\Cas\CasServiceProvider::class
     ],
 
     /*
@@ -208,6 +210,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        /* Additional Aliases */
+        'Cas'       => \Subfission\Cas\CasServiceProvider::class
 
     ],
 
