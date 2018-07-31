@@ -9,11 +9,15 @@
 - PHPStorm Helper
     
 
-
 ## Authentication
 
 - Must be in the user table to have access to the application
 
+## Setup
+- Make sure to change the default password for the OS that this application is running on
+- Become root
+- Go to /var/www/html/ProjectSystem
+- Run "php artisan addAdminUser {directoryID}"
 
 ## License: MIT
 
