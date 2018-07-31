@@ -6,7 +6,6 @@
     - Directory ID
     - Group (Admin or Student)
 - Basic Layout
-- PHPStorm Helper
     
 
 ## Authentication
