@@ -13,4 +13,15 @@
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
+
+Route::get('admin/setup/form', 'SetupController@setupForm')->name('Admin.Setup.Form');
+Route::get('admin/setup/reset', 'SetupController@reset')->name('Admin.Setup.Reset');
+
+Route::post('admin/setup', 'SetupController@setup')->name('Admin.Setup');
+
+Route::resource('peer_evaluations_instructor', 'PeerEvaluationsInstructorController');
+
+Route::resource('peer_evaluations_team_member', 'PeerEvaluationsTeamMemberController');
+
+Route::resource('peer_evaluations_team', 'PeerEvaluationsTeamController');

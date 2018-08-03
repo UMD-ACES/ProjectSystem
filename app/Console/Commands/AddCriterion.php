@@ -2,24 +2,24 @@
 
 namespace App\Console\Commands;
 
-use App\User;
+use App\Criterion;
 use Illuminate\Console\Command;
 
-class AddAdminUser extends Command
+class AddCriterion extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:addAdminUser {name} {directoryID}';
+    protected $signature = 'app:addCriterion {criterion}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Adds an admin user to the application';
+    protected $description = 'Adds a criterion';
 
     /**
      * Create a new command instance.
@@ -38,12 +38,8 @@ class AddAdminUser extends Command
      */
     public function handle()
     {
-        $user = $this->argument('directoryID');
-        $name = $this->argument('name');
+        $criterion = $this->argument('criterion');
 
-        /** @var User $user */
-        $user = User::create(array('name' => $name, 'dirID' => $user));
-        $user->type = User::$admin;
-        $user->save();
+        Criterion::create(array('name' => str_replace(' ', '_', strtolower($criterion)), 'humanName' => $criterion));
     }
 }

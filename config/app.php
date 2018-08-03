@@ -161,7 +161,9 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         // Installed Packages
-        \Subfission\Cas\CasServiceProvider::class
+        \Subfission\Cas\CasServiceProvider::class,
+
+        \App\Providers\ComposerServiceProvider::class
     ],
 
     /*

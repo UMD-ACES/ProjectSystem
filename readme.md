@@ -1,12 +1,4 @@
-# App Template
-
-## Template Contents:
-- CAS Authentication (with configuration)
-- User table 
-    - Directory ID
-    - Group (Admin or Student)
-- Basic Layout
-    
+# Project System
 
 ## Authentication
 
@@ -18,9 +10,13 @@
 3. Go to /var/www/html/ProjectSystem
 4. Run "php composer.phar install"
 5. Setup the DB connection in .env (may need to create a DB)
-6. Setup the CAS authentication in .env
-7. Run "php artisan migrate"
-8. Run "php artisan addAdminUser {directoryID}"
+6. Run "php artisan migrate"
+7. Run "php artisan addAdminUser {directoryID}"
+8. Go to <site>/setup.php
+
+## TODO:
+- Criteria setup in setup page
+
 
 ## License: MIT
 
