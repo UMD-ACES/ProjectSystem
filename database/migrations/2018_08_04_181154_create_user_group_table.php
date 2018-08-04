@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserCriteriaTable extends Migration
+class CreateUserGroupTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateUserCriteriaTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_criterion', function (Blueprint $table) {
+        Schema::create('user_group', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('peer_evaluation_id');
             $table->integer('user_id');
-            $table->integer('user_to_id');
-            $table->integer('criterion_id');
-            $table->string('value');
+            $table->integer('group_id');
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ class CreateUserCriteriaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_criteria');
+        Schema::dropIfExists('user_group');
     }
 }

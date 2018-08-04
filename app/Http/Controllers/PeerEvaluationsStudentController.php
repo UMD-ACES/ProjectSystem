@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Criterion;
+use App\Group;
 use App\PeerEvaluations;
 use App\PeerEvaluationsTeam;
 use App\PeerEvaluationsTeamMember;
@@ -11,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 
-class PeerEvaluationsTeamController extends Controller
+class PeerEvaluationsStudentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,12 +38,12 @@ class PeerEvaluationsTeamController extends Controller
             return response('Unauthorized.', 401);
         }
 
-        if($user->hasSubmittedCurrentPeerEvaluation())
+        if($user->hasSubmittedActivePeerEvaluation())
         {
             return response('Unauthorized.', 401);
         }
 
-        return view('peer_evaluations_team.create');
+        return view('peer_evaluations.create');
     }
 
     /**
@@ -60,15 +61,17 @@ class PeerEvaluationsTeamController extends Controller
             return response('Unauthorized.', 401);
         }
 
-        if($user->hasSubmittedCurrentPeerEvaluation())
-        {
-            return response('Unauthorized.', 401);
-        }
         // Make sure there is an active peer evaluation
         if(!PeerEvaluations::isOneActive())
         {
             return response('Unauthorized.', 401);
         }
+
+        if($user->hasSubmittedActivePeerEvaluation())
+        {
+            return response('Unauthorized.', 401);
+        }
+
 
         // Validate Basics: Group, Team Members, Team Evaluation
         $this->validate($request, [
@@ -125,7 +128,13 @@ class PeerEvaluationsTeamController extends Controller
 
         $this->validate($request, $criteriaValidation);
 
-        echo 'Success';
+        // Insert that the student has completed the active peer evaluation
+        $user->peerEvaluations()->attach(PeerEvaluations::active()->id,
+            ['display_to_user' => 1]);
+
+        // Associate user to group for this peer evaluation
+        $user->group()->attach($request->input('group'),
+            ['peer_evaluation_id' => PeerEvaluations::active()->id]);
 
         // Peer Evaluation Team
         PeerEvaluationsTeam::create(array(
@@ -133,10 +142,6 @@ class PeerEvaluationsTeamController extends Controller
             'user_id' => $user->id,
             'team_evaluation' => $request->input('team_evaluation')
         ));
-
-        // Associate user to group
-        $user->group_id = $request->input('group');
-        $user->save();
 
         // Peer Evaluation for each team member (including oneself)
         foreach ($request->input('teamMembers') as $teamMemberID)
@@ -150,44 +155,90 @@ class PeerEvaluationsTeamController extends Controller
             ));
         }
 
+        // For each criterion
         foreach (Criterion::all() as $criterion)
         {
+            // for each team member
             foreach ($request->input('teamMembers') as $teamMemberID)
             {
                 /** @var User $teamMember */
                 $teamMember = User::find($teamMemberID);
 
-                $teamMember->criteria()->attach($criterion->id,
-                    ['value' => $request->input($criterion->name.'_'.$teamMemberID)]);
+                $user->criteria()->attach($criterion->id,
+                    ['value' => $request->input($criterion->name.'_'.$teamMemberID),
+                     'peer_evaluation_id' => PeerEvaluations::active()->id,
+                     'user_to_id' => $teamMember->id]);
 
             }
         }
 
-        $user->peerEvaluations()->attach(PeerEvaluations::active()->id);
 
         return redirect()->route('home')->with('success', 1);
     }
 
     /**
-     * Display the specified resource.
+     * Display only the latest peer evaluation. ID is not used
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        /** @var User $user */
+        $user = User::get();
+
+        if(!$user->isStudent())
+        {
+            return response('Unauthorized.', 401);
+        }
+
+        // Make sure there is an active peer evaluation
+        if(!PeerEvaluations::isOneActive())
+        {
+            return response('Unauthorized.', 401);
+        }
+
+        if(!$user->hasSubmittedActivePeerEvaluation())
+        {
+            return response('Unauthorized.', 401);
+        }
+
+        return view('peer_evaluations.show');
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Remove the resource from student view
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+        /** @var User $user */
+        $user = User::get();
+
+        if(!$user->isStudent())
+        {
+            return response('Unauthorized.', 401);
+        }
+
+        // Make sure there is an active peer evaluation
+        if(!PeerEvaluations::isOneActive())
+        {
+            return response('Unauthorized.', 401);
+        }
+
+        if(!$user->hasSubmittedActivePeerEvaluation())
+        {
+            return response('Unauthorized.', 401);
+        }
+
+        $peerEvaluation = $user->getSubmittedActivePeerEvaluation();
+
+        $peerEvaluation->pivot->display_to_user = 0;
+        $peerEvaluation->pivot->save();
+
+        return redirect()->route('home');
     }
 
     /**
@@ -199,7 +250,9 @@ class PeerEvaluationsTeamController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+
+
     }
 
     /**

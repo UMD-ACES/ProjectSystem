@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Group;
 use App\PeerEvaluations;
 use App\User;
 use Illuminate\Http\Request;
@@ -28,6 +29,11 @@ class PeerEvaluationsInstructorController extends Controller
         $user = User::get();
 
         if(!$user->isAdmin())
+        {
+            return response('Unauthorized.', 401);
+        }
+
+        if(!User::isSetup() || !Group::isSetup())
         {
             return response('Unauthorized.', 401);
         }

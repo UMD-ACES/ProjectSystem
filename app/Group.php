@@ -12,4 +12,10 @@ class Group extends Model
     {
         return Group::all()->count() > 0;
     }
+
+    public function users()
+    {
+        return $this->belongsToMany('App\User', 'user_group')
+            ->withPivot('peer_evaluation_id');
+    }
 }

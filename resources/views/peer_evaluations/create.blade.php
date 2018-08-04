@@ -16,7 +16,7 @@
 
 @section('content')
 
-    <h1 style="text-align: center;">Evaluate your team</h1>
+    <h1 style="text-align: center;">Peer Evaluation: {{ \App\PeerEvaluations::active()->name }}</h1>
     <br/>
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -29,10 +29,10 @@
     @endif
     @if (isset($success))
         <div class="alert alert-success">
-            Successfully created!
+            Success!
         </div>
     @endif
-    <form method="POST" action="{{ route('peer_evaluations_team.store') }}">
+    <form method="POST" action="{{ route('peer_evaluations.store') }}">
         <div class="form-group">
             <label for="group">Select your group:</label>
             <select name="group" id="group" class="form-control">
@@ -138,7 +138,7 @@
             @if(old('teamMembers') != null) @foreach(old('teamMembers') as $teamMemberID) @unless($teamMemberID == $user->id)
                 <div id="teamMember_{{ $teamMemberID }}">
                     <br/><hr/><br/>
-                    <p class="sectionTitle">Team Member: {{ \App\User::find($teamMemberID)->name }}<br/><small>Contribution: <span id="teamMemberInfoGrade_' + id + '">TBD</span></small></p>
+                    <p class="sectionTitle">Team Member: {{ \App\User::find($teamMemberID)->name }}<br/><small>Contribution: <span id="teamMemberInfoGrade_{{ $teamMemberID }}">@if(old('grade_member_'.$teamMemberID)) {{ old('grade_member_'.$teamMemberID) }}% @else TBD @endif</span></small></p>
 
                     <div class="form-group">
                         <label for="grade_evaluation_{{ $teamMemberID }}">Evaluate your team member's contribution to the project</label>
@@ -176,7 +176,7 @@
 
         {{ csrf_field() }}
         <br/>
-        <button type="submit" class="btn btn-primary" onclick="submitForm();">Submit</button>
+        <button type="submit" class="btn btn-primary" onclick="return submitForm();">Submit</button>
     </form>
 @endsection
 
@@ -302,8 +302,15 @@
     <script>
         function submitForm()
         {
+            /*if(confirm("Are you sure you want to submit the form?\nMake sure you have followed the instructions and submitted on ELMS"))
+            {
+
+            }*/
+
             submittingForm = true;
             return true;
+
+            //eturn false;
         }
         $(window).bind('beforeunload', function(){
             if(submittingForm)

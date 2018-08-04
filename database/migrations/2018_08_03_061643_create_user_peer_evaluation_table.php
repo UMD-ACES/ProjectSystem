@@ -17,6 +17,7 @@ class CreateUserPeerEvaluationTable extends Migration
             $table->increments('id');
             $table->integer('peer_evaluation_id');
             $table->integer('user_id');
+            $table->integer('display_to_user')->default(1);
             $table->timestamps();
         });
     }
