@@ -68,7 +68,7 @@ return [
     |
     | VALIDATING THE CAS SERVER IS CRUCIAL TO THE SECURITY OF THE CAS PROTOCOL
     */
-    'cas_validation'          => env('CAS_VALIDATION', ''),
+    'cas_validation'          => env('CAS_VALIDATION', 'ca'),
 
     /*
     |--------------------------------------------------------------------------
