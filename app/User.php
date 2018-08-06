@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Subfission\Cas\Facades\Cas;
 
 class User extends Authenticatable
 {
@@ -27,7 +28,7 @@ class User extends Authenticatable
      */
     public static function get()
     {
-        return User::where('dirID', session('cas_user'))->first();
+        return User::where('dirID', Cas::user())->first();
     }
 
     /* --------------- Roles --------------- */
@@ -156,14 +157,43 @@ class User extends Authenticatable
             ->wherePivot('peer_evaluation_id', PeerEvaluations::active()->id);
     }
 
+    /* --------------- Filtering Relationships  ---------------
     /**
-     *
+     * Students can have many team members
      */
-    function getSubmittedActiveGroup()
+    function getSubmittedPeerEvaluationTeamMembers(PeerEvaluations $peerEval)
     {
-        return $this->group()
-            ->wherePivot('peer_evaluation_id', PeerEvaluations::active()->id)
+        return $this->peerEvaluationsTeamMembers()
+            ->where('peer_evaluation_id', $peerEval->id);
+    }
+
+    /**
+     * Students can have many team members
+     */
+    function getSubmittedPeerEvaluationTeamMember(PeerEvaluations $peerEval, User $teamMemberTo)
+    {
+        return $this->peerEvaluationsTeamMembers()
+            ->where('peer_evaluation_id', $peerEval->id)
+            ->where('user_to_id', $teamMemberTo->id)
             ->first();
+    }
+
+    /**
+     * Students can have many team members
+     */
+    function getSubmittedPeerEvaluationTeam(PeerEvaluations $peerEval)
+    {
+        return $this->peerEvaluationsTeam()
+            ->where('peer_evaluation_id', $peerEval->id)
+            ->first();
+    }
+
+    function getSubmittedPeerEvaluationCriteria(PeerEvaluations $peerEval, User $teamMemberTo)
+    {
+        return $this->criteria()
+            ->wherePivot('peer_evaluation_id', $peerEval->id)
+            ->where('user_to_id', $teamMemberTo->id)
+            ->get();
     }
 
 

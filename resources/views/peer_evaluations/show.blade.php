@@ -51,18 +51,18 @@
             <br/>
             <div class="form-group">
                 <small>How well did your team work together? Explain in detail and provide examples if necessary. </small>
-                <textarea class="form-control" id="team_evaluation"  disabled>{{ $user->getSubmittedActivePeerEvaluationTeam()->team_evaluation }}</textarea>
+                <textarea class="form-control" id="team_evaluation"  style="background-color:white" readonly>{{ $user->getSubmittedActivePeerEvaluationTeam()->team_evaluation }}</textarea>
             </div>
         </div>
 
         @foreach($user->getSubmittedActivePeerEvaluationTeamMembers as $peerEvaluationsActiveTeamMember)
             <div id="teamMember_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}">
                 <br/><hr/><br/>
-                <p class="sectionTitle">Team Member: {{ $peerEvaluationsActiveTeamMember->teamMember->name }}<br/><small>Contribution: <span id="teamMemberInfoGrade_' + id + '">{{ $peerEvaluationsActiveTeamMember->grade }}%</span></small></p>
+                <p class="sectionTitle">Team Member: {{ $peerEvaluationsActiveTeamMember->teamMember->name }}<br/><small>Contribution: <span id="teamMemberInfoGrade_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}">{{ $peerEvaluationsActiveTeamMember->grade }}%</span></small></p>
 
                 <div class="form-group">
                     <label for="grade_evaluation_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}">Evaluate your team member's contribution to the project</label>
-                    <textarea class="form-control" id="grade_evaluation_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}" disabled>{{ $peerEvaluationsActiveTeamMember->grade_evaluation  }}</textarea>
+                    <textarea class="form-control" id="grade_evaluation_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}" style="background-color:white" readonly>{{ $peerEvaluationsActiveTeamMember->grade_evaluation  }}</textarea>
                 </div>
 
                 <!-- Participation Table -->

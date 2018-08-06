@@ -28,8 +28,12 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ url('/') }}">Home <span class="sr-only">(current)</span></a>
                 </li>
+                <li>
+                    <a class="nav-link" href="{{ route('logout') }}">Logout</a>
+                </li>
             </ul>
         </div>
+
     </nav>
 
     <main role="main" class="container">

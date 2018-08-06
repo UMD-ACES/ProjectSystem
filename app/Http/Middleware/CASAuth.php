@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use App\User;
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Support\Facades\Auth;
+use Subfission\Cas\Facades\Cas;
 
 class CASAuth
 {
@@ -26,10 +28,10 @@ class CASAuth
      */
     public function handle($request, Closure $next)
     {
+
         if( $this->cas->checkAuthentication() )
         {
             // Store the user credentials in a Laravel managed session
-            session()->put('cas_user', $this->cas->user());
         } else {
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
@@ -37,7 +39,7 @@ class CASAuth
             $this->cas->authenticate();
         }
 
-        $user = User::where('dirID', session('cas_user'))
+        $user = User::where('dirID', CAS::user())
             //->where('group', User::$admin) // Allows only Admins to the application
             ->first();
 

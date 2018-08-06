@@ -64,7 +64,7 @@ class PeerEvaluationsInstructorController extends Controller
 
         PeerEvaluations::query()->update(['active' => 0]);
 
-        PeerEvaluations::create($request->all());
+        PeerEvaluations::query()->create($request->all());
 
         return view('peer_evaluations_instructor.create')->with('success', 1);
     }
@@ -75,9 +75,28 @@ class PeerEvaluationsInstructorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        //
+        $user = User::get();
+
+        if(!$user->isAdmin())
+        {
+            return response('Unauthorized.', 401);
+        }
+
+        $peerEvaluation = PeerEvaluations::query()->find($id);
+
+        $group = null;
+
+        if($request->has('group'))
+        {
+            $group = Group::query()->find($request->input('group'));
+        }
+
+        return view('peer_evaluations_instructor.show')
+            ->with('peerEvaluation', $peerEvaluation)
+            ->with('group', $group);
+
     }
 
     /**

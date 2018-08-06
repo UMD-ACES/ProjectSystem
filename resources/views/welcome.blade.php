@@ -7,7 +7,7 @@
 
 @section('content')
     <div>
-        <h1 style="text-align: center;">Peer Evaluation System</h1>
+        <h1 style="text-align: center;">Peer Evaluation System: {{ $user->name }}</h1>
         @if (isset($success))
             <div class="alert alert-success">
                 Success!

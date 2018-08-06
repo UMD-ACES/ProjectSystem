@@ -68,7 +68,7 @@ return [
     |
     | VALIDATING THE CAS SERVER IS CRUCIAL TO THE SECURITY OF THE CAS PROTOCOL
     */
-    'cas_validation'          => env('CAS_VALIDATION', 'ca'),
+    'cas_validation'          => env('CAS_VALIDATION', ''),
 
     /*
     |--------------------------------------------------------------------------
@@ -166,5 +166,5 @@ return [
     | This should only be used for developmental purposes.  getAttributes()
     | will return null in this condition.
      */
-    'cas_masquerade'      => env('CAS_MASQUERADE', '')
+    'cas_masquerade'      => env('CAS_MASQUERADE', 'lhmerino')
 ];
