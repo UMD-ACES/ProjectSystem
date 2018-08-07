@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Criterion;
 use App\Group;
-use App\PeerEvaluations;
+use App\PeerEvaluation;
 use App\PeerEvaluationsTeam;
 use App\PeerEvaluationsTeamMember;
 use App\User;
@@ -35,12 +35,12 @@ class PeerEvaluationsStudentController extends Controller
 
         if(!$user->isStudent())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         if($user->hasSubmittedActivePeerEvaluation())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         return view('student.peer_evaluations.create');
@@ -58,24 +58,23 @@ class PeerEvaluationsStudentController extends Controller
 
         if(!$user->isStudent())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         // Make sure there is an active peer evaluation
-        if(!PeerEvaluations::isOneActive())
+        if(!PeerEvaluation::isOneActive())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('home');
         }
 
         if($user->hasSubmittedActivePeerEvaluation())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('home');
         }
 
 
-        // Validate Basics: Group, Team Members, Team Evaluation
+        // Validate Basics: Team Members, Team Evaluation
         $this->validate($request, [
-            'group' => 'required|exists:groups,id',
             'teamMembers' => 'required|array|min:2',
             'teamMembers.*' => 'required|numeric|distinct|exists:users,id',
             'team_evaluation' => 'required|string',
@@ -110,6 +109,11 @@ class PeerEvaluationsStudentController extends Controller
 
         foreach ($request->input('teamMembers') as $teamMemberID)
         {
+            if($request->input('grade_evaluation_'.$teamMemberID) == '<p>&nbsp;</p>')
+            {
+                $request->merge(['grade_evaluation_'.$teamMemberID => '']);
+            }
+
             $gradeEvaluationValidation['grade_evaluation_'.$teamMemberID] = 'required|string';
         }
 
@@ -129,30 +133,36 @@ class PeerEvaluationsStudentController extends Controller
         $this->validate($request, $criteriaValidation);
 
         // Insert that the student has completed the active peer evaluation
-        $user->peerEvaluations()->attach(PeerEvaluations::active()->id,
+        $user->peerEvaluations()->attach(PeerEvaluation::active()->id,
             ['display_to_user' => 1]);
 
-        // Associate user to group for this peer evaluation
-        $user->group()->attach($request->input('group'),
-            ['peer_evaluation_id' => PeerEvaluations::active()->id]);
-
         // Peer Evaluation Team
-        PeerEvaluationsTeam::create(array(
-            'peer_evaluation_id' => PeerEvaluations::active()->id,
+        $peerEvaluationTeam = new PeerEvaluationsTeam(array(
+            'peer_evaluation_id' => PeerEvaluation::active()->id,
             'user_id' => $user->id,
             'team_evaluation' => $request->input('team_evaluation')
         ));
 
+        $peerEvaluationTeam->group()->associate($user->group);
+        $peerEvaluationTeam->user()->associate($user);
+        $peerEvaluationTeam->peerEvaluation()->associate(PeerEvaluation::active());
+
+        $peerEvaluationTeam->save();
+
+
         // Peer Evaluation for each team member (including oneself)
         foreach ($request->input('teamMembers') as $teamMemberID)
         {
-            PeerEvaluationsTeamMember::create(array(
-                'peer_evaluation_id' => PeerEvaluations::active()->id,
-                'user_id' => $user->id,
-                'user_to_id' => $teamMemberID,
+            $peerEvaluationTeamMember = new PeerEvaluationsTeamMember([
                 'grade'      => $request->input('grade_member_'.$teamMemberID),
-                'grade_evaluation' => $request->input('grade_evaluation_'.$teamMemberID)
-            ));
+                'grade_evaluation' => $request->input('grade_evaluation_'.$teamMemberID),
+            ]);
+
+            $peerEvaluationTeamMember->peerEvaluation()->associate(PeerEvaluation::active());
+            $peerEvaluationTeamMember->teamMember()->associate(User::query()->find($teamMemberID));
+            $peerEvaluationTeamMember->user()->associate($user);
+
+            $peerEvaluationTeamMember->save();
         }
 
         // For each criterion
@@ -162,11 +172,11 @@ class PeerEvaluationsStudentController extends Controller
             foreach ($request->input('teamMembers') as $teamMemberID)
             {
                 /** @var User $teamMember */
-                $teamMember = User::find($teamMemberID);
+                $teamMember = User::query()->find($teamMemberID);
 
                 $user->criteria()->attach($criterion->id,
                     ['value' => $request->input($criterion->name.'_'.$teamMemberID),
-                     'peer_evaluation_id' => PeerEvaluations::active()->id,
+                     'peer_evaluation_id' => PeerEvaluation::active()->id,
                      'user_to_id' => $teamMember->id]);
 
             }
@@ -189,18 +199,18 @@ class PeerEvaluationsStudentController extends Controller
 
         if(!$user->isStudent())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         // Make sure there is an active peer evaluation
-        if(!PeerEvaluations::isOneActive())
+        if(!PeerEvaluation::isOneActive())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         if(!$user->hasSubmittedActivePeerEvaluation())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         return view('student.peer_evaluations.show');
@@ -219,18 +229,18 @@ class PeerEvaluationsStudentController extends Controller
 
         if(!$user->isStudent())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         // Make sure there is an active peer evaluation
-        if(!PeerEvaluations::isOneActive())
+        if(!PeerEvaluation::isOneActive())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         if(!$user->hasSubmittedActivePeerEvaluation())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         $peerEvaluation = $user->getSubmittedActivePeerEvaluation();

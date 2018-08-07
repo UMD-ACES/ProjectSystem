@@ -16,7 +16,7 @@
 
 @section('content')
 
-    <h1 style="text-align: center;">Peer Evaluation: {{ \App\PeerEvaluations::active()->name }}</h1>
+    <h1 style="text-align: center;">Peer Evaluation: {{ \App\PeerEvaluation::active()->name }}</h1>
     <br/>
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -33,15 +33,6 @@
         </div>
     @endif
     <form method="POST" action="{{ route('Student.peer_evaluations.store') }}">
-        <div class="form-group">
-            <label for="group">Select your group:</label>
-            <select name="group" id="group" class="form-control">
-                <option></option>
-                @foreach(\App\Group::all() as $group)
-                    <option value="{{ $group->id }}" @if(old('group') == $group->id) selected @endif>{{ $group->name }} </option>
-                @endforeach
-            </select>
-        </div>
         <div class="form-group">
             <label for="teamMembers">Select your team members (including yourself):</label>
             <select name="teamMembers[]" id="teamMembers" class="form-control" multiple>
@@ -208,6 +199,7 @@
                 @foreach(old('teamMembers') as $teamMemberID)
                     @unless($teamMemberID == $user->id)
                         $('#participation_table_{{ $teamMemberID }}').DataTable(dataTableOptions);
+                        createClassicEditor('grade_evaluation_{{ $teamMemberID }}');
                     @endunless
                 @endforeach
             @endif

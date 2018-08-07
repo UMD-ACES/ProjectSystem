@@ -80,10 +80,6 @@
         <div class="form-group">
             <strong>Next Meeting Date and Time:</strong> {{ (new Carbon\Carbon($meetingMinute->next_meeting))->toDayDateTimeString() }}
         </div>
-
-        {{ csrf_field() }}
-        <br/>
-        <button type="submit" class="btn btn-primary" onclick="return submitForm();">Submit</button>
     </div>
 @endsection
 

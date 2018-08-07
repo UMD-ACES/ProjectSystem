@@ -33,7 +33,7 @@ class CASAuth
         {
             if ($request->ajax() || $request->wantsJson())
             {
-                return response('Unauthorized.', 401);
+                return redirect()->route('unauthorized');
             }
             $this->cas->authenticate();
         }
@@ -44,7 +44,7 @@ class CASAuth
 
         if(!$user)
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         return $next($request);

@@ -2,31 +2,34 @@
 
 namespace App;
 
+use Faker\Provider\UserAgent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-class PeerEvaluations extends Model
+class PeerEvaluation extends Model
 {
     protected $fillable = ['name'];
 
     public static function isOneActive()
     {
-        return PeerEvaluations::where('active', 1)->first() != null;
+        return PeerEvaluation::where('active', 1)->first() != null;
     }
 
     public static function active()
     {
-        return PeerEvaluations::where('active', 1)->first();
+        return PeerEvaluation::where('active', 1)->first();
     }
 
 
     /* --------------- Defining Relationships --------------- */
 
-    public function groups()
+    public function peerEvaluationsTeam()
     {
-        return $this->belongsToMany('App\Group', 'user_group', 'peer_evaluation_id')
+        return $this->hasMany('App\PeerEvaluationsTeam');
+            /*'peer_evaluations_team',
+            'peer_evaluation_id')
             ->withPivot('user_id')
-            ->withTimestamps();
+            ->withTimestamps();*/
     }
 
 
@@ -63,7 +66,7 @@ class PeerEvaluations extends Model
     public function getAllTeamMembers(Group $group)
     {
         // Gets all the team members that have submitted the peer evaluation
-        $teamMembersIDGroupForm = $this->groups()
+        $teamMembersIDGroupForm = $this->peerEvaluationsTeam()
             ->where('group_id', $group->id)
             ->get();
 
@@ -72,7 +75,7 @@ class PeerEvaluations extends Model
 
         foreach ($teamMembersIDGroupForm as $teamMember)
         {
-            $teamMembers[] = User::query()->find($teamMember->pivot->user_id);
+            $teamMembers[] = User::query()->find($teamMember->user_id);
         }
 
         // Gets all the team members from submitted peer_evaluation_team_members

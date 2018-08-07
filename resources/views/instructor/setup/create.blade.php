@@ -18,7 +18,7 @@
             Successfully created!
         </div>
     @endif
-    <form method="POST" action="{{ route('Admin.Setup') }}">
+    <form method="POST" action="{{ route('Admin.Setup.Store') }}">
         <ol>
             <li>Sign into Canvas/ELMS by going to myelms.umd.edu</li>
             <li>Go to the HACSXXX Class Page</li>

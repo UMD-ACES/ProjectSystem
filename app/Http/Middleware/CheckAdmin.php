@@ -21,8 +21,8 @@ class CheckAdmin
 
         if(!$user->isAdmin())
         {
-            Incident::report($user, 'Trying to access Admin Access Only Page');
-            return response('Unauthorized access. Incident reported.', 401);
+            Incident::report($user, 'Not an administrator - Restricted');
+            return redirect()->route('unauthorized');
         }
 
 

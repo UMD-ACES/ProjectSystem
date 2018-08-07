@@ -2,11 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Incident;
+use App\Group;
 use App\User;
 use Closure;
 
-class CheckStudent
+class CheckSystemSetup
 {
     /**
      * Handle an incoming request.
@@ -19,11 +19,16 @@ class CheckStudent
     {
         $user = User::get();
 
-        if(!$user->isStudent())
+        if(!Group::isSetup() || !User::isSetup())
         {
-            Incident::report($user, 'Not a student');
-            return redirect()->route('unauthorized');
+            if($user->isAdmin())
+            {
+                return redirect()->route('Admin.Setup.Form');
+            }
+
+            return response('System not yet setup');
         }
+
 
         return $next($request);
     }

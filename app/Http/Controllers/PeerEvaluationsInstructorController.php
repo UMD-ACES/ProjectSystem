@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Group;
 use App\Incident;
-use App\PeerEvaluations;
+use App\PeerEvaluation;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -32,12 +32,12 @@ class PeerEvaluationsInstructorController extends Controller
         if(!$user->isAdmin())
         {
             Incident::report($user, 'Admin Access Only - Creating a new peer evaluation');
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         if(!User::isSetup() || !Group::isSetup())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         return view('instructor.peer_evaluations.create');
@@ -56,7 +56,7 @@ class PeerEvaluationsInstructorController extends Controller
         if(!$user->isAdmin())
         {
             Incident::report($user, 'Admin Access Only - Creating a new peer evaluation');
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
 
@@ -65,9 +65,9 @@ class PeerEvaluationsInstructorController extends Controller
             'name' => 'required|string'
         ]);
 
-        PeerEvaluations::query()->update(['active' => 0]);
+        PeerEvaluation::query()->update(['active' => 0]);
 
-        PeerEvaluations::query()->create($request->all());
+        PeerEvaluation::query()->create($request->all());
 
         return view('instructor.peer_evaluations.create')->with('success', 1);
     }
@@ -85,10 +85,10 @@ class PeerEvaluationsInstructorController extends Controller
         if(!$user->isAdmin())
         {
             Incident::report($user, 'CRITICAL - Admin Access Only - Trying to access the peer evaluation viewer');
-            return response('Unauthorized. Incident Reported.', 401);
+            return redirect()->route('unauthorized');
         }
 
-        $peerEvaluation = PeerEvaluations::query()->find($id);
+        $peerEvaluation = PeerEvaluation::query()->findOrFail($id);
 
         $group = null;
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Group;
-use App\PeerEvaluations;
+use App\PeerEvaluation;
 use App\PeerEvaluationsTeam;
 use App\PeerEvaluationsTeamMember;
 use App\User;
@@ -18,7 +18,7 @@ class SetupInstructorController extends Controller
 
         if(!$user->isAdmin())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         if(Group::isSetup() || User::isSetup())
@@ -36,7 +36,7 @@ class SetupInstructorController extends Controller
 
         if(!$user->isAdmin())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         if(Group::isSetup() || User::isSetup())
@@ -61,6 +61,11 @@ class SetupInstructorController extends Controller
 
         foreach ($students as $student)
         {
+            if($student['name'] == 'Test Student')
+            {
+                continue;
+            }
+
             /** @var User $user */
             $user = User::query()->create(array(
                 'dirID' => $student['login_id'],
@@ -88,7 +93,7 @@ class SetupInstructorController extends Controller
 
         if(!$user->isAdmin())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         if(Group::isSetup() || User::isSetup())
@@ -107,10 +112,10 @@ class SetupInstructorController extends Controller
 
         if(!$user->isAdmin())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
-        PeerEvaluations::query()->truncate();
+        PeerEvaluation::query()->truncate();
         PeerEvaluationsTeamMember::query()->truncate();
         PeerEvaluationsTeam::query()->truncate();
         DB::table('user_group')->truncate();

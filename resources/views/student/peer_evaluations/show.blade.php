@@ -21,7 +21,7 @@
     <h1 style="text-align: center;">Peer Evaluation: {{ $user->getSubmittedActivePeerEvaluation()->name }}</h1>
 
     <div id="peerEvaluation">
-        <p id="group" style="text-align: center; font-size: 1.5em;">Your group: {{ $user->getSubmittedActiveGroup()->name }}</p>
+        <p id="group" style="text-align: center; font-size: 1.5em;">Your group: {{ $user->group->name }}</p>
 
         <table id="teamMembers">
             <thead>

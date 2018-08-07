@@ -17,6 +17,7 @@ class CreatePeerEvaluationsTeamTable extends Migration
             $table->increments('id');
             $table->integer('peer_evaluation_id');
             $table->integer('user_id');
+            $table->integer('group_id');
             $table->text('team_evaluation');
             $table->timestamps();
         });

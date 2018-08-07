@@ -33,15 +33,6 @@
         </div>
     @endif
     <form method="POST" action="{{ route('Student.meeting_minutes.store') }}">
-        <div class="form-group">
-            <label for="group">Select your group:</label>
-            <select name="group" id="group" class="form-control">
-                <option></option>
-                @foreach(\App\Group::all() as $group)
-                    <option value="{{ $group->id }}" @if(old('group') == $group->id) selected @endif>{{ $group->name }} </option>
-                @endforeach
-            </select>
-        </div>
         <p class="sectionTitle">Attendance</p>
         <div class="form-group">
             <label for="presentMembers">Present:</label>

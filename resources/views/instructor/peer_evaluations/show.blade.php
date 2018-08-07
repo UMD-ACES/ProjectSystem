@@ -1,5 +1,5 @@
 @extends('layouts.app')
-<?php /** @var \App\PeerEvaluations $peerEvaluation */ ?>
+<?php /** @var \App\PeerEvaluation $peerEvaluation */ ?>
 <?php /** @var \App\User $teamMember */ ?>
 
 @section('stylesheets')
@@ -56,12 +56,14 @@
         </table>
         <br/>
         <h2 style="text-align:center;">Team Evaluation</h2>
-        @foreach($peerEvaluation->getTeamMembers($group) as $teamMember)
-            <p class="sectionTitle">{{ $teamMember->name }}</p>
+        @foreach($peerEvaluation->getAllTeamMembers($group) as $teamMember)
+            @if($teamMember->getSubmittedPeerEvaluationTeamMember($peerEvaluation, $teamMember) != null)
+                <p class="sectionTitle">{{ $teamMember->name }}</p>
             <div class="form-group">
                 <small>How well did your team work together? Explain in detail and provide examples if necessary. </small>
                 <textarea class="form-control textarea-editor" style="background-color:white" readonly>{{ $teamMember->getSubmittedPeerEvaluationTeam($peerEvaluation)->team_evaluation }}</textarea>
             </div>
+            @endif
         @endforeach
 
         <input type="button" onclick="individualEvaluations(this);" class="btn btn-primary" value="Show individual evaluations"/>
@@ -183,7 +185,7 @@
         window.onload = function() {
             var allEditors = document.querySelectorAll('.textarea-editor');
             for (var i = 0; i < allEditors.length; ++i) {
-                createClassicEditor(allEditors[i], false);
+                createReadOnlyEditor(allEditors[i], false);
             }
         }
 

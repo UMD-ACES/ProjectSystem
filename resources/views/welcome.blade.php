@@ -46,7 +46,7 @@
             </table>
 
             <!-- Peer Evaluation -->
-            <h2 style="text-align: center;">Peer Evaluation</h2>
+            <h2 style="text-align: center;">Peer Evaluations</h2>
             <table id="peerEvaluations">
                 <thead>
                 <tr>
@@ -105,25 +105,25 @@
             <br/><br/>
 
             <!-- Peer Evaluation -->
-            <h2 style="text-align: center;">Peer Evaluation</h2>
+            <h2 style="text-align: center;">Peer Evaluations</h2>
             <br/>
-            @if(\App\PeerEvaluations::isOneActive())
-                <p style="text-align: center;">Current Peer Evaluation: {{ \App\PeerEvaluations::active()->name }}</p>
+            @if(\App\PeerEvaluation::isOneActive())
+                <p style="text-align: center;">Current Peer Evaluation: {{ \App\PeerEvaluation::active()->name }}</p>
             @endif
 
-            @if(\App\PeerEvaluations::isOneActive() && !$user->hasSubmittedActivePeerEvaluation())
+            @if(\App\PeerEvaluation::isOneActive() && !$user->hasSubmittedActivePeerEvaluation())
                 <p style="text-align:center;">
                     <a href="{{ route('Student.peer_evaluations.create') }}" class="btn btn-primary">Fill out your peer evaluation</a>
                 </p>
-            @elseif(\App\PeerEvaluations::isOneActive() && $user->getSubmittedActivePeerEvaluation()->pivot->display_to_user)
+            @elseif(\App\PeerEvaluation::isOneActive() && $user->getSubmittedActivePeerEvaluation()->pivot->display_to_user)
                 <p style="text-align: center;">
-                    <a href="{{ route('Student.peer_evaluations.show', \App\PeerEvaluations::active()->id) }}" class="btn btn-primary">Save your most recent peer evaluation</a><br/><br/>
-                    <a href="{{ route('Student.peer_evaluations.edit', \App\PeerEvaluations::active()->id) }}" class="btn btn-primary">Uploaded to ELMS</a>
+                    <a href="{{ route('Student.peer_evaluations.show', \App\PeerEvaluation::active()->id) }}" class="btn btn-primary">Save your most recent peer evaluation</a><br/><br/>
+                    <a href="{{ route('Student.peer_evaluations.edit', \App\PeerEvaluation::active()->id) }}" class="btn btn-primary">Uploaded to ELMS</a>
                 </p>
-            @elseif(\App\PeerEvaluations::isOneActive() && $user->getSubmittedActivePeerEvaluation()->pivot->display_to_user == 0)
+            @elseif(\App\PeerEvaluation::isOneActive() && $user->getSubmittedActivePeerEvaluation()->pivot->display_to_user == 0)
                 <p style="text-align: center;color:green;"><strong>Submitted</strong></p>
             @else
-                <p style="text-align: center;color: red;">Not active</p>
+                <p style="text-align: center;color: orange;">Not Active</p>
             @endif
             <!-- End of Peer Evaluation -->
 

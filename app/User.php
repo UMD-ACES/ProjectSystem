@@ -67,6 +67,11 @@ class User extends Authenticatable
 
     /* --------------- Defining Relationships --------------- */
 
+    public function group()
+    {
+        return $this->belongsTo('App\Group');
+    }
+
     /**
      * Pivot Table: user_criterion
      */
@@ -98,18 +103,8 @@ class User extends Authenticatable
      */
     function peerEvaluations()
     {
-        return $this->belongsToMany('App\PeerEvaluations', 'user_peer_evaluation', 'user_id', 'peer_evaluation_id')
+        return $this->belongsToMany('App\PeerEvaluation', 'user_peer_evaluation', 'user_id', 'peer_evaluation_id')
             ->withPivot('display_to_user')
-            ->withTimestamps();
-    }
-
-    /**
-     * The group that the user belongs depending on a specific peer evaluation
-     */
-    function group()
-    {
-        return $this->belongsToMany('App\Group', 'user_group')
-            ->withPivot('peer_evaluation_id')
             ->withTimestamps();
     }
 
@@ -136,7 +131,7 @@ class User extends Authenticatable
     function getSubmittedActivePeerEvaluationTeamMembers()
     {
         return $this->peerEvaluationsTeamMembers()
-            ->where('peer_evaluation_id', PeerEvaluations::active()->id);
+            ->where('peer_evaluation_id', PeerEvaluation::active()->id);
     }
 
     /**
@@ -145,7 +140,7 @@ class User extends Authenticatable
     function getSubmittedActivePeerEvaluationTeam()
     {
         return $this->hasMany('App\PeerEvaluationsTeam')
-            ->where('peer_evaluation_id', PeerEvaluations::active()->id)
+            ->where('peer_evaluation_id', PeerEvaluation::active()->id)
             ->first();
     }
 
@@ -162,21 +157,14 @@ class User extends Authenticatable
     function getSubmittedActivePeerEvaluationCriteria()
     {
         return $this->criteria()
-            ->wherePivot('peer_evaluation_id', PeerEvaluations::active()->id);
-    }
-
-    function getSubmittedActiveGroup()
-    {
-        return $this->group()
-            ->wherePivot('peer_evaluation_id', PeerEvaluations::active()->id)
-            ->first();
+            ->wherePivot('peer_evaluation_id', PeerEvaluation::active()->id);
     }
 
     /* --------------- Filtering Relationships  ---------------
     /**
      * Students can have many team members
      */
-    function getSubmittedPeerEvaluationTeamMembers(PeerEvaluations $peerEval)
+    function getSubmittedPeerEvaluationTeamMembers(PeerEvaluation $peerEval)
     {
         return $this->peerEvaluationsTeamMembers()
             ->where('peer_evaluation_id', $peerEval->id);
@@ -185,7 +173,7 @@ class User extends Authenticatable
     /**
      * Students can have many team members
      */
-    function getSubmittedPeerEvaluationTeamMember(PeerEvaluations $peerEval, User $teamMemberTo)
+    function getSubmittedPeerEvaluationTeamMember(PeerEvaluation $peerEval, User $teamMemberTo)
     {
         return $this->peerEvaluationsTeamMembers()
             ->where('peer_evaluation_id', $peerEval->id)
@@ -196,14 +184,14 @@ class User extends Authenticatable
     /**
      * Students can have many team members
      */
-    function getSubmittedPeerEvaluationTeam(PeerEvaluations $peerEval)
+    function getSubmittedPeerEvaluationTeam(PeerEvaluation $peerEval)
     {
         return $this->peerEvaluationsTeam()
             ->where('peer_evaluation_id', $peerEval->id)
             ->first();
     }
 
-    function getSubmittedPeerEvaluationCriteria(PeerEvaluations $peerEval, User $teamMemberTo)
+    function getSubmittedPeerEvaluationCriteria(PeerEvaluation $peerEval, User $teamMemberTo)
     {
         return $this->criteria()
             ->wherePivot('peer_evaluation_id', $peerEval->id)

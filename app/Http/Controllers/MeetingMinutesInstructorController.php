@@ -54,7 +54,7 @@ class MeetingMinutesInstructorController extends Controller
         if(!$user->isAdmin())
         {
             Incident::report($user, 'Meeting Minutes Admin Only Page');
-            return response('Unauthorized. Incident Reported.', 401);
+            return redirect()->route('unauthorized');
         }
 
         $meetingMinute = MeetingMinute::query()->find($id);

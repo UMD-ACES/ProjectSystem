@@ -24,7 +24,13 @@ Route::get('/', function () {
         return redirect()->route('Admin.Home');
     }
 
+    \App\Incident::report($user, 'No access to the application');
+    return view('unauthorized');
 })->name('home');
+
+Route::get('/unauthorized', function() {
+   return view('unauthorized');
+})->name('unauthorized');
 
 
 /* CAS */
@@ -34,31 +40,41 @@ Route::get('logout', function() {
     \Subfission\Cas\Facades\Cas::logout();
 })->name('logout');
 
+
+/* Authenticated as an Admin */
+Route::group(['prefix' => 'admin/setup',
+              'as' => 'Admin.Setup.',
+              'middleware' => [
+                  'admin',
+              ],
+], function() {
+    /* System Setup */
+    Route::get('form', 'SetupInstructorController@setupForm')
+        ->name('Form');
+
+    Route::get('reset', 'SetupInstructorController@reset')
+        ->name('Reset');
+
+    Route::get('refresh', 'SetupInstructorController@refresh')
+        ->name('Refresh');
+
+    Route::post('setup', 'SetupInstructorController@setup')->name('Store');
+});
+
+
+
 /* Authenticated as an Admin */
 Route::group(['prefix' => 'admin',
               'as' => 'Admin.',
               'middleware' => [
-                  'admin'
+                  'admin',
+                  'system.isReady',
               ],
             ], function() {
 
     Route::get('home', function() {
         return view('welcome');
     })->name('Home');
-
-
-    /* Instructor Setup */
-    Route::get('setup/form', 'SetupInstructorController@setupForm')
-        ->name('Setup.Form');
-
-    Route::get('setup/reset', 'SetupInstructorController@reset')
-        ->name('Setup.Reset');
-
-    Route::get('setup/refresh', 'SetupInstructorController@refresh')
-        ->name('Setup.Refresh');
-
-    Route::post('admin/setup', 'SetupInstructorController@setup')->name('Setup');
-
 
     /* Peer Evaluations */
     Route::resource('peer_evaluations', 'PeerEvaluationsInstructorController');
@@ -74,6 +90,7 @@ Route::group(['prefix' => 'student',
               'as' => 'Student.',
               'middleware' => [
                   'student',
+                  'system.isReady',
                   'student.isReady'
               ],
 ], function() {
@@ -93,15 +110,16 @@ Route::group(['prefix' => 'student',
 
 /* Authenticated as a student */
 Route::group(['prefix' => 'student',
-              'as' => 'Student.Setup',
+              'as' => 'Student.Setup.',
               'middleware' => [
                   'student',
+                  'system.isReady',
               ],
 ], function() {
 
     /* Student Setup */
     Route::get('setup', 'SetupStudentController@setupForm')->name('Form');
-    Route::post('setup', 'SetupStudentController@setup')->name('Setup');
+    Route::post('setup', 'SetupStudentController@setup')->name('Store');
 });
 
 

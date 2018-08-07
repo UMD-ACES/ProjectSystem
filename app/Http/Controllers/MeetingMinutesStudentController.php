@@ -32,7 +32,7 @@ class MeetingMinutesStudentController extends Controller
 
         if(!$user->isStudent())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         return view('student.meeting_minutes.create');
@@ -50,7 +50,7 @@ class MeetingMinutesStudentController extends Controller
 
         if(!$user->isStudent())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         if($request->input('actionItems') == '<p>&nbsp;</p>')
@@ -65,7 +65,6 @@ class MeetingMinutesStudentController extends Controller
 
         // Validate request
         $this->validate($request, [
-            'group' => 'required|exists:groups,id',
             'presentMembers' => 'required|array|min:2',
             'presentMembers.*' => 'required|numeric|distinct|exists:users,id',
             'absentMembers' => 'array',
@@ -86,7 +85,7 @@ class MeetingMinutesStudentController extends Controller
         ]);
 
         $meetingMinute->user()->associate($user);
-        $meetingMinute->group()->associate(Group::query()->find($request->input('group')));
+        $meetingMinute->group()->associate($user->group);
 
         $meetingMinute->save();
 
@@ -130,7 +129,7 @@ class MeetingMinutesStudentController extends Controller
 
         if(!$user->isStudent())
         {
-            return response('Unauthorized.', 401);
+            return redirect()->route('unauthorized');
         }
 
         $meetingMinutesForUser = MeetingMinute::findForUser($user);
@@ -138,7 +137,7 @@ class MeetingMinutesStudentController extends Controller
         if(!in_array($id, $meetingMinutesForUser->pluck('id')->toArray()))
         {
             Incident::report($user, 'Meeting Minutes Unauthorized Page');
-            return response('Unauthorized. Incident Reported.', 401);
+            return redirect()->route('unauthorized');
         }
 
         // Double check - Better be safe
@@ -151,7 +150,7 @@ class MeetingMinutesStudentController extends Controller
         }
 
         //Incident::report($user, 'Meeting Minutes Unauthorized Page');
-        return response('Unauthorized. Incident Reported.', 401);
+        return redirect()->route('unauthorized');
     }
 
     /**

@@ -4,7 +4,7 @@ namespace App\Providers;
 
 
 use App\Group;
-use App\PeerEvaluations;
+use App\PeerEvaluation;
 use App\User;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -21,7 +21,7 @@ class ComposerServiceProvider extends ServiceProvider
         });
 
         View::composer('*', function($view) {
-            $peerEvaluations = PeerEvaluations::all();
+            $peerEvaluations = PeerEvaluation::all();
 
 
             $view->with('peerEvaluations', $peerEvaluations);
