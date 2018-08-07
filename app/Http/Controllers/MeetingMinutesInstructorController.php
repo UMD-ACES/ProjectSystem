@@ -64,7 +64,7 @@ class MeetingMinutesInstructorController extends Controller
             return response('Meeting Minute does not exist');
         }
 
-        return view('meeting_minutes_student.show')->with('meetingMinute', $meetingMinute);
+        return view('student.meeting_minutes.show')->with('meetingMinute', $meetingMinute);
     }
 
     /**

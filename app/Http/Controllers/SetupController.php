@@ -27,7 +27,7 @@ class SetupController extends Controller
             return view('welcome');
         }
 
-        return view('setup.create');
+        return view('instructor.setup.create');
     }
 
     public function setup(Request $request)
@@ -42,7 +42,7 @@ class SetupController extends Controller
         if(Group::isSetup() || User::isSetup())
         {
             // Already setup
-            return view('welcome');
+            return redirect()->route('home');
         }
 
         // Remove the "while(1);" loop
@@ -79,7 +79,7 @@ class SetupController extends Controller
             ));
         }
 
-        return view('welcome')->with('success', 1);
+        return redirect()->route('home')->with('success', 1);
     }
 
     public function reset()

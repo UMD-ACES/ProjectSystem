@@ -40,7 +40,7 @@ class PeerEvaluationsInstructorController extends Controller
             return response('Unauthorized.', 401);
         }
 
-        return view('peer_evaluations_instructor.create');
+        return view('instructor.peer_evaluations.create');
     }
 
     /**
@@ -69,7 +69,7 @@ class PeerEvaluationsInstructorController extends Controller
 
         PeerEvaluations::query()->create($request->all());
 
-        return view('peer_evaluations_instructor.create')->with('success', 1);
+        return view('instructor.peer_evaluations.create')->with('success', 1);
     }
 
     /**
@@ -97,7 +97,7 @@ class PeerEvaluationsInstructorController extends Controller
             $group = Group::query()->find($request->input('group'));
         }
 
-        return view('peer_evaluations_instructor.show')
+        return view('instructor.peer_evaluations.show')
             ->with('peerEvaluation', $peerEvaluation)
             ->with('group', $group);
 

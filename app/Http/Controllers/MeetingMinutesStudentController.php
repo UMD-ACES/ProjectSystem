@@ -35,7 +35,7 @@ class MeetingMinutesStudentController extends Controller
             return response('Unauthorized.', 401);
         }
 
-        return view('meeting_minutes_student.create');
+        return view('student.meeting_minutes.create');
     }
 
     /**
@@ -146,7 +146,7 @@ class MeetingMinutesStudentController extends Controller
         {
             if($meetingMinute->id == $id)
             {
-                return view('meeting_minutes_student.show')->with('meetingMinute', $meetingMinute);
+                return view('student.meeting_minutes.show')->with('meetingMinute', $meetingMinute);
             }
         }
 

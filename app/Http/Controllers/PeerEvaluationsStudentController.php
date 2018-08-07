@@ -43,7 +43,7 @@ class PeerEvaluationsStudentController extends Controller
             return response('Unauthorized.', 401);
         }
 
-        return view('peer_evaluations.create');
+        return view('student.peer_evaluations.create');
     }
 
     /**
@@ -203,7 +203,7 @@ class PeerEvaluationsStudentController extends Controller
             return response('Unauthorized.', 401);
         }
 
-        return view('peer_evaluations.show');
+        return view('student.peer_evaluations.show');
     }
 
     /**
