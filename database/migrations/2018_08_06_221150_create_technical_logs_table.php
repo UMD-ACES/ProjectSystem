@@ -15,7 +15,10 @@ class CreateTechnicalLogsTable extends Migration
     {
         Schema::create('technical_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('');
+            $table->integer('user_id');
+            $table->integer('group_id');
+            //$table->integer('')
+
             $table->timestamps();
         });
     }

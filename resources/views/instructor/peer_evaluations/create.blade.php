@@ -19,7 +19,7 @@
             Successfully created!
         </div>
     @endif
-    <form method="POST" action="{{ route('peer_evaluations_instructor.store') }}">
+    <form method="POST" action="{{ route('Admin.peer_evaluations.store') }}">
         <div class="form-group">
             <label for="name">Name:</label>
             <input type="text" name="name" class="form-control" id="name" placeholder="Enter peer evaluation name">

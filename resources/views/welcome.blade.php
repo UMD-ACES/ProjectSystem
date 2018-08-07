@@ -33,7 +33,7 @@
                 <tbody>
                     @foreach(\App\MeetingMinute::all() as $meetingMinute)
                         <tr>
-                            <td><a href="{{ route('meeting_minutes_instructor.show', $meetingMinute->id) }}">Access</a></td>
+                            <td><a href="{{ route('Admin.meeting_minutes.show', $meetingMinute->id) }}">Access</a></td>
                             <td>{{ $meetingMinute->group->name }}</td>
                             <td>{{ $meetingMinute->user->name }}</td>
                             <td>{{ (new Carbon\Carbon($meetingMinute->start))->toDayDateTimeString() }}</td>
@@ -58,7 +58,7 @@
                 <tbody>
                 @foreach($peerEvaluations as $peerEvaluation)
                     <tr>
-                        <td><a href="{{ route('peer_evaluations_instructor.show', $peerEvaluation->id) }}">{{ $peerEvaluation->name }}</a></td>
+                        <td><a href="{{ route('Admin.peer_evaluations.show', $peerEvaluation->id) }}">{{ $peerEvaluation->name }}</a></td>
                         <td>{{ $peerEvaluation->active }}</td>
                         <td>{{ $peerEvaluation->created_at }}</td>
                     </tr>
@@ -67,7 +67,7 @@
             </table>
 
             @if(\App\Group::isSetup() || \App\User::isSetup())
-                <a href="{{ route('peer_evaluations_instructor.create') }}" class="btn btn-primary">Create a new peer evaluation</a>
+                <a href="{{ route('Admin.peer_evaluations.create') }}" class="btn btn-primary">Create a new peer evaluation</a>
                 <a href="{{ route('Admin.Setup.Reset') }}" class="btn btn-danger" onclick="return confirm('Are you want to reset the entire setup?\nPrevious Peer Evaluation data will NOT be deleted')">Reset Setup</a>
                 <a href="{{ route('Admin.Setup.Refresh') }}" class="btn btn-danger" onclick="return confirm('Are you want to delete all peer evaluations?\nThis action is irreversible')">Delete Peer Evaluations</a>
             @else
@@ -90,7 +90,7 @@
                 <tbody>
                     @foreach(\App\MeetingMinute::findForUser($user) as $meetingMinute)
                         <tr>
-                            <td><a href="{{ route('meeting_minutes.show', $meetingMinute->id) }}">Access</a></td>
+                            <td><a href="{{ route('Student.meeting_minutes.show', $meetingMinute->id) }}">Access</a></td>
                             <td>{{ (new Carbon\Carbon($meetingMinute->start))->toDayDateTimeString()  }}</td>
                             <td>{{ (new Carbon\Carbon($meetingMinute->end))->toDayDateTimeString()  }}</td>
                             <td>{{ ((new \Carbon\Carbon($meetingMinute->end))->diffInHours(new \Carbon\Carbon($meetingMinute->start))) }}:{{ ((new \Carbon\Carbon($meetingMinute->end))->diff(new \Carbon\Carbon($meetingMinute->start)))->format('%I:%S') }}</td>
@@ -99,7 +99,7 @@
                 </tbody>
             </table>
             <p style="text-align:center">
-                <a href="{{ route('meeting_minutes.create') }}" class="btn btn-primary">Add</a>
+                <a href="{{ route('Student.meeting_minutes.create') }}" class="btn btn-primary">Add</a>
             </p>
 
             <br/><br/>
@@ -113,12 +113,12 @@
 
             @if(\App\PeerEvaluations::isOneActive() && !$user->hasSubmittedActivePeerEvaluation())
                 <p style="text-align:center;">
-                    <a href="{{ route('peer_evaluations.create') }}" class="btn btn-primary">Fill out your peer evaluation</a>
+                    <a href="{{ route('Student.peer_evaluations.create') }}" class="btn btn-primary">Fill out your peer evaluation</a>
                 </p>
             @elseif(\App\PeerEvaluations::isOneActive() && $user->getSubmittedActivePeerEvaluation()->pivot->display_to_user)
                 <p style="text-align: center;">
-                    <a href="{{ route('peer_evaluations.show', \App\PeerEvaluations::active()->id) }}" class="btn btn-primary">Save your most recent peer evaluation</a><br/><br/>
-                    <a href="{{ route('peer_evaluations.edit', \App\PeerEvaluations::active()->id) }}" class="btn btn-primary">Uploaded to ELMS</a>
+                    <a href="{{ route('Student.peer_evaluations.show', \App\PeerEvaluations::active()->id) }}" class="btn btn-primary">Save your most recent peer evaluation</a><br/><br/>
+                    <a href="{{ route('Student.peer_evaluations.edit', \App\PeerEvaluations::active()->id) }}" class="btn btn-primary">Uploaded to ELMS</a>
                 </p>
             @elseif(\App\PeerEvaluations::isOneActive() && $user->getSubmittedActivePeerEvaluation()->pivot->display_to_user == 0)
                 <p style="text-align: center;color:green;"><strong>Submitted</strong></p>

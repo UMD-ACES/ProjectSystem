@@ -10,7 +10,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class SetupController extends Controller
+class SetupInstructorController extends Controller
 {
     public function setupForm()
     {

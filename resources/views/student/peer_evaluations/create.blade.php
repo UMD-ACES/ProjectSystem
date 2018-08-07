@@ -32,7 +32,7 @@
             Success!
         </div>
     @endif
-    <form method="POST" action="{{ route('peer_evaluations.store') }}">
+    <form method="POST" action="{{ route('Student.peer_evaluations.store') }}">
         <div class="form-group">
             <label for="group">Select your group:</label>
             <select name="group" id="group" class="form-control">

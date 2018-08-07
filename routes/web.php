@@ -12,8 +12,20 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $user = \App\User::get();
+
+    if($user->isStudent())
+    {
+        return redirect()->route('Student.Home');
+    }
+
+    if($user->isAdmin())
+    {
+        return redirect()->route('Admin.Home');
+    }
+
 })->name('home');
+
 
 /* CAS */
 Route::get('logout', function() {
@@ -22,34 +34,90 @@ Route::get('logout', function() {
     \Subfission\Cas\Facades\Cas::logout();
 })->name('logout');
 
+/* Authenticated as an Admin */
+Route::group(['prefix' => 'admin',
+              'as' => 'Admin.',
+              'middleware' => [
+                  'admin'
+              ],
+            ], function() {
 
-/* Setup */
-Route::get('admin/setup/form', 'SetupController@setupForm')
-    ->name('Admin.Setup.Form')
-    ->middleware('admin');
+    Route::get('home', function() {
+        return view('welcome');
+    })->name('Home');
 
 
-Route::get('admin/setup/reset', 'SetupController@reset')
-    ->name('Admin.Setup.Reset')
-    ->middleware('admin');;
+    /* Instructor Setup */
+    Route::get('setup/form', 'SetupInstructorController@setupForm')
+        ->name('Setup.Form');
 
-    Route::get('admin/setup/refresh', 'SetupController@refresh')
-    ->name('Admin.Setup.Refresh')
-    ->middleware('admin');
+    Route::get('setup/reset', 'SetupInstructorController@reset')
+        ->name('Setup.Reset');
 
-Route::post('admin/setup', 'SetupController@setup')->name('Admin.Setup')
-    ->middleware('admin');
+    Route::get('setup/refresh', 'SetupInstructorController@refresh')
+        ->name('Setup.Refresh');
 
-/* Peer Evaluations */
+    Route::post('admin/setup', 'SetupInstructorController@setup')->name('Setup');
 
-Route::resource('peer_evaluations_instructor', 'PeerEvaluationsInstructorController')
-    ->middleware('admin');
 
-Route::resource('peer_evaluations', 'PeerEvaluationsStudentController');
+    /* Peer Evaluations */
+    Route::resource('peer_evaluations', 'PeerEvaluationsInstructorController');
 
-/** Meeting Minutes */
+    /* Meeting Minutes */
+    Route::resource('meeting_minutes', 'MeetingMinutesInstructorController');
 
-Route::resource('meeting_minutes', 'MeetingMinutesStudentController');
 
-Route::resource('meeting_minutes_instructor', 'MeetingMinutesInstructorController')
-    ->middleware('admin');
+});
+
+/* Authenticated as a student and is setup */
+Route::group(['prefix' => 'student',
+              'as' => 'Student.',
+              'middleware' => [
+                  'student',
+                  'student.isReady'
+              ],
+], function() {
+
+    /* Home */
+    Route::get('home', function() {
+        return view('welcome');
+    })->name('Home');
+
+
+    /* Peer Evaluations */
+    Route::resource('peer_evaluations', 'PeerEvaluationsStudentController');
+
+    /* Meeting Minutes */
+    Route::resource('meeting_minutes', 'MeetingMinutesStudentController');
+});
+
+/* Authenticated as a student */
+Route::group(['prefix' => 'student',
+              'as' => 'Student.Setup',
+              'middleware' => [
+                  'student',
+              ],
+], function() {
+
+    /* Student Setup */
+    Route::get('setup', 'SetupStudentController@setupForm')->name('Form');
+    Route::post('setup', 'SetupStudentController@setup')->name('Setup');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

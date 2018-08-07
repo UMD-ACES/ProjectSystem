@@ -3,6 +3,8 @@
 namespace App\Http;
 
 use App\Http\Middleware\CheckAdmin;
+use App\Http\Middleware\CheckStudent;
+use App\Http\Middleware\CheckStudentSetup;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -38,7 +40,6 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
-
         'api' => [
             'throttle:60,1',
             'bindings',
@@ -63,6 +64,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'cas.auth'  => \Subfission\Cas\Middleware\CASAuth::class,
         'cas.guest' => \Subfission\Cas\Middleware\RedirectCASAuthenticated::class,
-        'admin' => CheckAdmin::class
+        'admin' => CheckAdmin::class,
+        'student' => CheckStudent::class,
+        'student.isReady' => CheckStudentSetup::class
     ];
 }

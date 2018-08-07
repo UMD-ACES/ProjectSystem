@@ -15,7 +15,7 @@
 @section('content')
     <h1 style="text-align:center;">Instructor View: {{ $peerEvaluation->name }}</h1>
 
-    <form method="GET" id="groupSelect" action="{{ route('peer_evaluations_instructor.show', $peerEvaluation->id ) }}">
+    <form method="GET" id="groupSelect" action="{{ route('Admin.peer_evaluations.show', $peerEvaluation->id ) }}">
 
         <div class="form-group">
             <label for="group">Group:</label>
