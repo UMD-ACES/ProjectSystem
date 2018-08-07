@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Group;
+use App\Incident;
 use App\PeerEvaluations;
 use App\User;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ class PeerEvaluationsInstructorController extends Controller
 
         if(!$user->isAdmin())
         {
+            Incident::report($user, 'Admin Access Only - Creating a new peer evaluation');
             return response('Unauthorized.', 401);
         }
 
@@ -53,6 +55,7 @@ class PeerEvaluationsInstructorController extends Controller
 
         if(!$user->isAdmin())
         {
+            Incident::report($user, 'Admin Access Only - Creating a new peer evaluation');
             return response('Unauthorized.', 401);
         }
 
@@ -81,7 +84,8 @@ class PeerEvaluationsInstructorController extends Controller
 
         if(!$user->isAdmin())
         {
-            return response('Unauthorized.', 401);
+            Incident::report($user, 'CRITICAL - Admin Access Only - Trying to access the peer evaluation viewer');
+            return response('Unauthorized. Incident Reported.', 401);
         }
 
         $peerEvaluation = PeerEvaluations::query()->find($id);

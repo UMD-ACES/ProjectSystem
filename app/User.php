@@ -113,7 +113,15 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    function meetingMinute()
+    {
+        return $this->hasMany('App\MeetingMinute');
+    }
 
+    function meetingMinuteAttendances()
+    {
+        return $this->hasMany('App\MeetingMinutesAttendance');
+    }
 
 
     /* --------------- Filtering Relationships  ---------------
@@ -155,6 +163,13 @@ class User extends Authenticatable
     {
         return $this->criteria()
             ->wherePivot('peer_evaluation_id', PeerEvaluations::active()->id);
+    }
+
+    function getSubmittedActiveGroup()
+    {
+        return $this->group()
+            ->wherePivot('peer_evaluation_id', PeerEvaluations::active()->id)
+            ->first();
     }
 
     /* --------------- Filtering Relationships  ---------------

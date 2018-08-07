@@ -60,7 +60,7 @@
             <p class="sectionTitle">{{ $teamMember->name }}</p>
             <div class="form-group">
                 <small>How well did your team work together? Explain in detail and provide examples if necessary. </small>
-                <textarea class="form-control" style="background-color:white" readonly>{{ $teamMember->getSubmittedPeerEvaluationTeam($peerEvaluation)->team_evaluation }}</textarea>
+                <textarea class="form-control textarea-editor" style="background-color:white" readonly>{{ $teamMember->getSubmittedPeerEvaluationTeam($peerEvaluation)->team_evaluation }}</textarea>
             </div>
         @endforeach
 
@@ -76,7 +76,7 @@
                     <p class="sectionTitle">From: {{ $teamMember->name }} To {{ $teamMemberTo->name }} <br/><small>Contribution: <span>{{ $teamMember->getSubmittedPeerEvaluationTeamMember($peerEvaluation, $teamMemberTo)->grade }}%</span></small></p>
                     <div class="form-group">
                         <label>Evaluate your team member's contribution to the project</label>
-                        <textarea class="form-control" style="background-color:white" readonly>{{ $teamMember->getSubmittedPeerEvaluationTeamMember($peerEvaluation, $teamMemberTo)->grade_evaluation  }}</textarea>
+                        <textarea class="form-control textarea-editor" style="background-color:white" readonly>{{ $teamMember->getSubmittedPeerEvaluationTeamMember($peerEvaluation, $teamMemberTo)->grade_evaluation  }}</textarea>
                     </div>
 
                         <!-- Participation Table -->
@@ -122,7 +122,7 @@
                                     <p class="sectionTitle">From {{ $teamMember->name }} To {{ $teamMemberTo->name }} <br/><small>Contribution: <span>{{ $teamMember->getSubmittedPeerEvaluationTeamMember($peerEvaluation, $teamMemberTo)->grade }}%</span></small></p>
                                     <div class="form-group">
                                         <label><small>Evaluate your team member's contribution to the project</small></label>
-                                        <textarea class="form-control" style="background-color:white" readonly>{{ $teamMember->getSubmittedPeerEvaluationTeamMember($peerEvaluation, $teamMemberTo)->grade_evaluation  }}</textarea>
+                                        <textarea class="form-control textarea-editor" style="background-color:white" readonly>{{ $teamMember->getSubmittedPeerEvaluationTeamMember($peerEvaluation, $teamMemberTo)->grade_evaluation  }}</textarea>
                                     </div>
 
                                     <!-- Participation Table -->
@@ -180,22 +180,30 @@
             paging: false
         };
 
-        let scrollHeightThreshold = 0;
-        let scrollHeightIndividualSet = 0;
-        let scrollHeightModals = [];
+        window.onload = function() {
+            var allEditors = document.querySelectorAll('.textarea-editor');
+            for (var i = 0; i < allEditors.length; ++i) {
+                createClassicEditor(allEditors[i], false);
+            }
+        }
+
+
+        //let scrollHeightThreshold = 0;
+        //let scrollHeightIndividualSet = 0;
+        //let scrollHeightModals = [];
 
         $('table').DataTable(dataTableOptions);
 
-        $("textarea").each(function(textarea) {
+        /*$("textarea").each(function(textarea) {
             if($(this)[0].scrollHeight > scrollHeightThreshold)
             {
                 $(this).height( $(this)[0].scrollHeight );
             }
-        });
+        });*/
 
         $('.modal').on('shown.bs.modal', function (e) {
 
-            if(!scrollHeightModals.includes($(e.target).attr('id')))
+            /*if(!scrollHeightModals.includes($(e.target).attr('id')))
             {
                 let height = $(e.target).find('textarea')[0].scrollHeight;
                 console.log(height);
@@ -203,7 +211,7 @@
                 $(e.target).find('textarea').height(height);
 
                 scrollHeightModals.push($(e.target).attr('id'));
-            }
+            }*/
         })
     </script>
 
@@ -215,14 +223,14 @@
                 $('#teamMemberEvaluation').show();
                 $(el).val('Hide individual evaluations');
 
-                if(scrollHeightIndividualSet === 0)
+                /*if(scrollHeightIndividualSet === 0)
                 {
                     $("#teamMemberEvaluation textarea").each(function(textarea) {
                         $(this).height( $(this)[0].scrollHeight );
                     });
                 }
 
-                scrollHeightIndividualSet = 1;
+                scrollHeightIndividualSet = 1;*/
             }
             else
             {

@@ -96,7 +96,7 @@
         <div class="form-group">
             <label for="team_evaluation">Evaluate your team:</label><br/>
             <small>How well did your team work together? Explain in detail and provide examples if necessary. </small>
-            <textarea class="form-control" name="team_evaluation" id="team_evaluation" rows="5">{{ old('team_evaluation') }}</textarea>
+            <textarea class="form-control" name="team_evaluation" id="team_evaluation" style="height: 300px;">{{ old('team_evaluation') }}</textarea>
         </div>
 
         <br/><hr/><br/>
@@ -183,27 +183,38 @@
 @section('scripts')
     <script>
 
-        // Select2 setup
-        $('#group').select2({
-            placeholder: "Group:"
-        });
-        $('#teamMembers').select2();
-
+        var teamContributionTable;
         // DataTable setup
         var dataTableOptions = {
             paging: false
         };
 
-        var teamContributionTable = $("#teamContribution").DataTable(dataTableOptions);
-        $('#participation_table_' + '{{ $user->id }}').DataTable(dataTableOptions);
+        window.onload = function()
+        {
+            // Select2 setup
+            $('#group').select2({
+                placeholder: "Group:"
+            });
+            $('#teamMembers').select2();
 
-        @if(old('teamMembers') != null)
-            @foreach(old('teamMembers') as $teamMemberID)
-                @unless($teamMemberID == $user->id)
-                    $('#participation_table_{{ $teamMemberID }}').DataTable(dataTableOptions);
-                @endunless
-            @endforeach
-        @endif
+
+
+            teamContributionTable = $("#teamContribution").DataTable(dataTableOptions);
+            createClassicEditor('team_evaluation');
+            $('#participation_table_' + '{{ $user->id }}').DataTable(dataTableOptions);
+            createClassicEditor('grade_evaluation_' + '{{ $user->id }}');
+
+            @if(old('teamMembers') != null)
+                @foreach(old('teamMembers') as $teamMemberID)
+                    @unless($teamMemberID == $user->id)
+                        $('#participation_table_{{ $teamMemberID }}').DataTable(dataTableOptions);
+                    @endunless
+                @endforeach
+            @endif
+        }
+
+
+
 
         // Flags
         var submittingForm = false;
@@ -270,6 +281,8 @@
 
             $('#teamMemberEvaluations').append(teamMemberDiv);
             $('#participation_table_' + id).DataTable(dataTableOptions);
+            createClassicEditor('grade_evaluation_' + id);
+
 
         }
 
@@ -302,15 +315,8 @@
     <script>
         function submitForm()
         {
-            /*if(confirm("Are you sure you want to submit the form?\nMake sure you have followed the instructions and submitted on ELMS"))
-            {
-
-            }*/
-
             submittingForm = true;
             return true;
-
-            //eturn false;
         }
         $(window).bind('beforeunload', function(){
             if(submittingForm)
@@ -320,6 +326,23 @@
 
             return 'Are you sure you want to leave?';
         });
+    </script>
+
+    <script>
+       /* tinymce.init({ selector:'textarea',
+            theme: 'modern',
+            height: 300,
+            plugins: [
+                'advlist autolink link lists charmap print preview hr anchor pagebreak',
+                'searchreplace wordcount visualblocks visualchars code insertdatetime nonbreaking',
+                'save table contextmenu directionality emoticons paste textcolor'
+            ],
+            content_css: 'css/content.css',
+
+        });*/
+
+       /* Editor Configuration */
+
     </script>
 
 @endsection

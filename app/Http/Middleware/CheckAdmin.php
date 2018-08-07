@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Incident;
 use App\User;
 use Closure;
 
@@ -20,6 +21,7 @@ class CheckAdmin
 
         if(!$user->isAdmin())
         {
+            Incident::report($user, 'Trying to access Admin Access Only Page');
             return response('Unauthorized access. Incident reported.', 401);
         }
 

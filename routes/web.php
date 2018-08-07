@@ -47,3 +47,9 @@ Route::resource('peer_evaluations_instructor', 'PeerEvaluationsInstructorControl
 
 Route::resource('peer_evaluations', 'PeerEvaluationsStudentController');
 
+/** Meeting Minutes */
+
+Route::resource('meeting_minutes', 'MeetingMinutesStudentController');
+
+Route::resource('meeting_minutes_instructor', 'MeetingMinutesInstructorController')
+    ->middleware('admin');

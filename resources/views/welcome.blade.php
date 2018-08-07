@@ -7,7 +7,8 @@
 
 @section('content')
     <div>
-        <h1 style="text-align: center;">Peer Evaluation System: {{ $user->name }}</h1>
+        <h1 style="text-align: center;">Group Project System: {{ $user->name }}</h1>
+        <br/>
         @if (isset($success))
             <div class="alert alert-success">
                 Success!
@@ -15,6 +16,37 @@
         @endif
 
         @if($user->isAdmin())
+            <!-- Meeting Minutes -->
+            <h2 style="text-align: center;">Meeting Minutes</h2>
+            <table id="meetingMinutes">
+                <thead>
+                    <tr>
+                        <th>Meeting</th>
+                        <th>Group</th>
+                        <th>Creator</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Duration</th>
+                        <th>Submitted At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(\App\MeetingMinute::all() as $meetingMinute)
+                        <tr>
+                            <td><a href="{{ route('meeting_minutes_instructor.show', $meetingMinute->id) }}">Access</a></td>
+                            <td>{{ $meetingMinute->group->name }}</td>
+                            <td>{{ $meetingMinute->user->name }}</td>
+                            <td>{{ (new Carbon\Carbon($meetingMinute->start))->toDayDateTimeString() }}</td>
+                            <td>{{ (new Carbon\Carbon($meetingMinute->end))->toDayDateTimeString() }}</td>
+                            <td>{{ ((new \Carbon\Carbon($meetingMinute->end))->diffInHours(new \Carbon\Carbon($meetingMinute->start))) }}:{{ ((new \Carbon\Carbon($meetingMinute->end))->diff(new \Carbon\Carbon($meetingMinute->start)))->format('%I:%S') }}</td>
+                            <td>{{ (new Carbon\Carbon($meetingMinute->created_at))->toDayDateTimeString() }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <!-- Peer Evaluation -->
+            <h2 style="text-align: center;">Peer Evaluation</h2>
             <table id="peerEvaluations">
                 <thead>
                 <tr>
@@ -41,8 +73,40 @@
             @else
                 <a href="{{ route('Admin.Setup.Form') }}" class="btn btn-primary">Setup</a>
             @endif
+            <!-- End of Peer Evaluation -->
 
         @elseif($user->isStudent())
+            <!-- Meeting Minutes -->
+            <h2 style="text-align: center;">Meeting Minutes</h2>
+            <table id="meetingMinutes">
+                <thead>
+                    <tr>
+                        <th>Meeting</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach(\App\MeetingMinute::findForUser($user) as $meetingMinute)
+                        <tr>
+                            <td><a href="{{ route('meeting_minutes.show', $meetingMinute->id) }}">Access</a></td>
+                            <td>{{ (new Carbon\Carbon($meetingMinute->start))->toDayDateTimeString()  }}</td>
+                            <td>{{ (new Carbon\Carbon($meetingMinute->end))->toDayDateTimeString()  }}</td>
+                            <td>{{ ((new \Carbon\Carbon($meetingMinute->end))->diffInHours(new \Carbon\Carbon($meetingMinute->start))) }}:{{ ((new \Carbon\Carbon($meetingMinute->end))->diff(new \Carbon\Carbon($meetingMinute->start)))->format('%I:%S') }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <p style="text-align:center">
+                <a href="{{ route('meeting_minutes.create') }}" class="btn btn-primary">Add</a>
+            </p>
+
+            <br/><br/>
+
+            <!-- Peer Evaluation -->
+            <h2 style="text-align: center;">Peer Evaluation</h2>
+            <br/>
             @if(\App\PeerEvaluations::isOneActive())
                 <p style="text-align: center;">Current Peer Evaluation: {{ \App\PeerEvaluations::active()->name }}</p>
             @endif
@@ -61,6 +125,7 @@
             @else
                 <p style="text-align: center;color: red;">Not active</p>
             @endif
+            <!-- End of Peer Evaluation -->
 
         @endif
     </div>
@@ -71,6 +136,13 @@
     @if($user->isAdmin())
         <script>
             $('#peerEvaluations').DataTable();
+            $('#meetingMinutes').DataTable();
+        </script>
+    @endif
+
+    @if($user->isStudent())
+        <script>
+            $('#meetingMinutes').DataTable();
         </script>
     @endif
 

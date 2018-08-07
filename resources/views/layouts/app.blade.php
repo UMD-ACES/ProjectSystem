@@ -1,7 +1,7 @@
 @extends('layouts.skeleton')
 
 @section('head')
-    <title>@yield('title')</title>
+    <title>Project System - @yield('title')</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <style>
         body {
@@ -9,6 +9,9 @@
         }
         .template {
             padding: 3rem 1.5rem;
+        }
+        .ck-editor__editable {
+            min-height: 200px;
         }
     </style>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
@@ -18,7 +21,7 @@
 
 @section('body')
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-        <a class="navbar-brand" href="{{ route('home') }}">Peer Evaluation System</a>
+        <a class="navbar-brand" href="{{ route('home') }}">Group Project System</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -48,6 +51,70 @@
     <script src="/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <!--<script src="/js/tinymce/tinymce.min.js"></script>-->
+    <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+    <!--<script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/inline/ckeditor.js"></script>-->
+
+    <script>
+        let toolBarSetting = [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote', "undo", "redo" ];
+
+        function createClassicEditor(selector, id = true)
+        {
+            let element;
+
+            if(id === true)
+            {
+                element = document.querySelector('#' + selector);
+            }
+            else
+            {
+                element = selector;
+            }
+
+
+            ClassicEditor
+                .create( element, {
+                    toolbar: toolBarSetting,
+                })
+                .then( editor => {
+                    console.log( Array.from( editor.ui.componentFactory.names ) );
+
+                    window.editor = editor;
+                } )
+                .catch( error => {
+                    console.error( error );
+                } );
+        }
+
+        function createReadOnlyEditor(selector, id = true)
+        {
+            let element;
+
+            if(id === true)
+            {
+                element = document.querySelector('#' + selector);
+            }
+            else
+            {
+                element = selector;
+            }
+
+
+            ClassicEditor
+                .create( element, {
+                    toolbar: toolBarSetting,
+                    //isReadOnly: true,
+
+                })
+                .then( editor => {
+                    editor.isReadOnly = true;
+                    console.log(editor);
+                } )
+                .catch( error => {
+                    console.error( error );
+                } );
+        }
+    </script>
 
     @yield('scripts')
 @endsection

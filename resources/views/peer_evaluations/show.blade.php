@@ -101,20 +101,31 @@
 
         $('#teamMembers').DataTable(dataTableOptions);
 
+        createReadOnlyEditor('team_evaluation');
+
         @foreach($user->getSubmittedActivePeerEvaluationTeamMembers as $peerEvaluationsActiveTeamMember)
             $('#participation_table_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}').DataTable(dataTableOptions);
+            createReadOnlyEditor('grade_evaluation_' + '{{ $peerEvaluationsActiveTeamMember->teamMember->id }}' );
         @endforeach
     </script>
 
     <script>
         window.onload = function() {
-            $("textarea").each(function(textarea) {
+            /*$("textarea").each(function(textarea) {
                 $(this).height( $(this)[0].scrollHeight );
-            });
+            });*/
 
             window.print();
         }
 
+    </script>
+
+    <script>
+        /*tinymce.init({ selector:'textarea',
+            toolbar: false,
+            menubar: false,
+            plugins: ['autoresize']
+        });*/
     </script>
 
 @endsection

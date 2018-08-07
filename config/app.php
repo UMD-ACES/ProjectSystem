@@ -65,7 +65,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/New_York',
 
     /*
     |--------------------------------------------------------------------------
@@ -162,6 +162,7 @@ return [
 
         // Installed Packages
         \Subfission\Cas\CasServiceProvider::class,
+        //Xavrsl\Cas\CasServiceProvider::class,
 
         \App\Providers\ComposerServiceProvider::class
     ],
@@ -215,6 +216,7 @@ return [
 
         /* Additional Aliases */
         'Cas'       => \Subfission\Cas\CasServiceProvider::class
+        //'Cas'       => Xavrsl\Cas\Facades\Cas::class,
 
     ],
 

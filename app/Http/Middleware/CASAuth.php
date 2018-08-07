@@ -29,11 +29,10 @@ class CASAuth
     public function handle($request, Closure $next)
     {
 
-        if( $this->cas->checkAuthentication() )
+        if(! $this->cas->checkAuthentication())
         {
-            // Store the user credentials in a Laravel managed session
-        } else {
-            if ($request->ajax() || $request->wantsJson()) {
+            if ($request->ajax() || $request->wantsJson())
+            {
                 return response('Unauthorized.', 401);
             }
             $this->cas->authenticate();
