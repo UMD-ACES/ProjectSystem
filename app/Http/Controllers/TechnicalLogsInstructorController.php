@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Incident;
-use App\MeetingMinute;
+use App\TechnicalLog;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
 
-class MeetingMinutesInstructorController extends Controller
+class TechnicalLogsInstructorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -53,19 +52,19 @@ class MeetingMinutesInstructorController extends Controller
 
         if(!$user->isAdmin())
         {
-            Incident::report($user, 'Meeting Minutes Admin Only Page');
+            Incident::report($user, 'Technical Log Admin Only Page');
             return redirect()->route('unauthorized');
         }
 
-        $meetingMinute = MeetingMinute::query()->findOrFail($id);
+        $technicalLog = TechnicalLog::query()->findOrFail($id);
 
         // Should not happen
-        if($meetingMinute == null)
+        if($technicalLog == null)
         {
-            return response('Meeting Minute does not exist');
+            return response('Technical Log does not exist');
         }
 
-        return view('student.meeting_minutes.show')->with('meetingMinute', $meetingMinute);
+        return view('student.technical_logs.show')->with('technicalLog', $technicalLog);
     }
 
     /**

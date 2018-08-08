@@ -71,7 +71,7 @@ Route::group(['prefix' => 'admin',
                   'system.isReady',
               ],
             ], function() {
-
+    /* Home */
     Route::get('home', function() {
         return view('welcome');
     })->name('Home');
@@ -82,7 +82,8 @@ Route::group(['prefix' => 'admin',
     /* Meeting Minutes */
     Route::resource('meeting_minutes', 'MeetingMinutesInstructorController');
 
-
+    /* Technical Logs */
+    Route::resource('technical_logs', 'TechnicalLogsInstructorController');
 });
 
 /* Authenticated as a student and is setup */
@@ -94,18 +95,19 @@ Route::group(['prefix' => 'student',
                   'student.isReady'
               ],
 ], function() {
-
     /* Home */
     Route::get('home', function() {
         return view('welcome');
     })->name('Home');
-
 
     /* Peer Evaluations */
     Route::resource('peer_evaluations', 'PeerEvaluationsStudentController');
 
     /* Meeting Minutes */
     Route::resource('meeting_minutes', 'MeetingMinutesStudentController');
+
+    /* Technical Logs */
+    Route::resource('technical_logs', 'TechnicalLogsStudentController');
 });
 
 /* Authenticated as a student */

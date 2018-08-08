@@ -44,6 +44,26 @@
                     @endforeach
                 </tbody>
             </table>
+            <!-- Technical Logs -->
+            <h2 style="text-align: center;">Technical Logs</h2>
+            <table id="technicalLogs">
+                <thead>
+                <tr>
+                    <th>Meeting</th>
+                    <th>Category</th>
+                    <th>Completed_at</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach(\App\TechnicalLog::all() as $technicalLog)
+                    <tr>
+                        <td><a href="{{ route('Admin.technical_logs.show', $technicalLog->id) }}">Access</a></td>
+                        <td>{{ $technicalLog->category->name }}</td>
+                        <td>{{ (new Carbon\Carbon($technicalLog->completed_at))->toDayDateTimeString()  }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
 
             <!-- Peer Evaluation -->
             <h2 style="text-align: center;">Peer Evaluations</h2>
@@ -103,6 +123,29 @@
             </p>
 
             <br/><br/>
+            <!-- Technical Logs -->
+            <h2 style="text-align: center;">Technical Logs</h2>
+            <table id="technicalLogs">
+                <thead>
+                <tr>
+                    <th>Meeting</th>
+                    <th>Category</th>
+                    <th>Completed_at</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($user->group->technicalLogs as $technicalLog)
+                    <tr>
+                        <td><a href="{{ route('Student.technical_logs.show', $technicalLog->id) }}">Access</a></td>
+                        <td>{{ $technicalLog->category->name }}</td>
+                        <td>{{ (new Carbon\Carbon($technicalLog->completed_at))->toDayDateTimeString()  }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+            <p style="text-align:center">
+                <a href="{{ route('Student.technical_logs.create') }}" class="btn btn-primary">Add</a>
+            </p>
 
             <!-- Peer Evaluation -->
             <h2 style="text-align: center;">Peer Evaluations</h2>
@@ -137,12 +180,14 @@
         <script>
             $('#peerEvaluations').DataTable();
             $('#meetingMinutes').DataTable();
+            $('#technicalLogs').DataTable();
         </script>
     @endif
 
     @if($user->isStudent())
         <script>
             $('#meetingMinutes').DataTable();
+            $('#technicalLogs').DataTable();
         </script>
     @endif
 

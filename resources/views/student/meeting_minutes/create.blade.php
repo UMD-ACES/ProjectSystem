@@ -80,9 +80,12 @@
         </div>
         <p class="sectionTitle">Meeting Items</p>
 
-        <p>Action Items from your last meeting</p>
-        <!-- TODO: -->
-
+        @if($user->group->meetingMinutes->count() > 0)
+            <div class="form-group">
+                <label for="previousActionItems" style="font-size: 1.2em;font-weight: bold;">Action Items from your last meeting:</label>
+                <textarea class="form-control" id="previousActionItems">{{ $user->group->lastMeetingMinute->first()->action_items }}</textarea>
+            </div>
+        @endif
 
         <div class="form-group">
             <label for="notes">Notes:</label><br/>
@@ -136,6 +139,7 @@
 
             createClassicEditor('notes');
             createClassicEditor('actionItems');
+            createReadOnlyEditor('previousActionItems');
         }
 
 

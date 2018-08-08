@@ -2,24 +2,24 @@
 
 namespace App\Console\Commands;
 
-use App\Criterion;
+use App\TechnicalCategory;
 use Illuminate\Console\Command;
 
-class AddCriterion extends Command
+class AddTechnicalCategory extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:addCriterion {criterion}';
+    protected $signature = 'app:addTechnicalCategory {category}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Adds a criterion';
+    protected $description = 'Adds a technical category';
 
     /**
      * Create a new command instance.
@@ -38,8 +38,8 @@ class AddCriterion extends Command
      */
     public function handle()
     {
-        $criterion = $this->argument('criterion');
-
-        Criterion::query()->create(array('name' => str_replace(' ', '_', strtolower($criterion)), 'humanName' => $criterion));
+        TechnicalCategory::query()->create([
+            'name' => $this->argument('category')
+        ]);
     }
 }

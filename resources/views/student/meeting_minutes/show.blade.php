@@ -1,5 +1,6 @@
 @extends('layouts.app')
 <?php /** @var \App\MeetingMinute $meetingMinute */?>
+<?php /** @var \App\User $user */?>
 
 @section('stylesheets')
 
