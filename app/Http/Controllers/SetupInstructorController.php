@@ -110,14 +110,14 @@ class SetupInstructorController extends Controller
         }
 
         PeerEvaluation::query()->truncate();
-        Criterion::query()->truncate();
+        //Criterion::query()->truncate();
         Incident::query()->truncate();
         MeetingMinute::query()->truncate();
         MeetingMinutesAttendance::query()->truncate();
         PeerEvaluation::query()->truncate();
         PeerEvaluationsTeam::query()->truncate();
         PeerEvaluationsTeamMember::query()->truncate();
-        TechnicalCategory::query()->truncate();
+        //TechnicalCategory::query()->truncate();
         TechnicalLog::query()->truncate();
         DB::table('user_peer_evaluation')->truncate();
         DB::table('user_criterion')->truncate();
