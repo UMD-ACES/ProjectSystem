@@ -21,7 +21,7 @@
 ## Recommended
 Turn off password authentication and solely allow publickey authentication
 
-Peer Evaluation Criteria:
+Peer Evaluation Criteria:  
 php artisan app:addCriterion "Attended group meetings"  
 php artisan app:addCriterion "Available for communication"  
 php artisan app:addCriterion "Contributed to ideas/planning"  
@@ -32,7 +32,7 @@ php artisan app:addCriterion "Wrote/tested automation scripts"
 php artisan app:addCriterion "Created honey"  
 php artisan app:addCriterion "Did fair share of work"  
 
-Technical Log Criteria:
+Technical Log Criteria:  
 php artisan app:addTechnicalCategory "Host Configuration"  
 php artisan app:addTechnicalCategory "Honeypot VMs"  
 php artisan app:addTechnicalCategory "Networking"  
