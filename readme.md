@@ -22,21 +22,21 @@
 Turn off password authentication and solely allow publickey authentication
 
 Peer Evaluation Criteria:
-php artisan app:addCriterion "Attended group meetings"
-php artisan app:addCriterion "Available for communication"
-php artisan app:addCriterion "Contributed to ideas/planning"
-php artisan app:addCriterion "Contributed to testing/researching if those ideas would work"
-php artisan app:addCriterion "Conducted research/background information"
-php artisan app:addCriterion "Configured honeypot"
-php artisan app:addCriterion "Wrote/tested automation scripts"
-php artisan app:addCriterion "Created honey"
-php artisan app:addCriterion "Did fair share of work"
+php artisan app:addCriterion "Attended group meetings"  
+php artisan app:addCriterion "Available for communication"  
+php artisan app:addCriterion "Contributed to ideas/planning"  
+php artisan app:addCriterion "Contributed to testing/researching if those ideas would work"  
+php artisan app:addCriterion "Conducted research/background information"  
+php artisan app:addCriterion "Configured honeypot"  
+php artisan app:addCriterion "Wrote/tested automation scripts"  
+php artisan app:addCriterion "Created honey"  
+php artisan app:addCriterion "Did fair share of work"  
 
 Technical Log Criteria:
-php artisan app:addTechnicalCategory "Host Configuration"
-php artisan app:addTechnicalCategory "Honeypot VMs"
-php artisan app:addTechnicalCategory "Networking"
-php artisan app:addTechnicalCategory "Scripts"
+php artisan app:addTechnicalCategory "Host Configuration"  
+php artisan app:addTechnicalCategory "Honeypot VMs"  
+php artisan app:addTechnicalCategory "Networking"  
+php artisan app:addTechnicalCategory "Scripts"  
 
 ## TODO:
 - Criteria setup in setup page
