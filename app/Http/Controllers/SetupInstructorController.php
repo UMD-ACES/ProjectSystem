@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Criterion;
 use App\Group;
+use App\Incident;
+use App\MeetingMinute;
+use App\MeetingMinutesAttendance;
 use App\PeerEvaluation;
 use App\PeerEvaluationsTeam;
 use App\PeerEvaluationsTeamMember;
+use App\TechnicalCategory;
+use App\TechnicalLog;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -103,6 +109,19 @@ class SetupInstructorController extends Controller
             Group::query()->truncate();
         }
 
+        PeerEvaluation::query()->truncate();
+        Criterion::query()->truncate();
+        Incident::query()->truncate();
+        MeetingMinute::query()->truncate();
+        MeetingMinutesAttendance::query()->truncate();
+        PeerEvaluation::query()->truncate();
+        PeerEvaluationsTeam::query()->truncate();
+        PeerEvaluationsTeamMember::query()->truncate();
+        TechnicalCategory::query()->truncate();
+        TechnicalLog::query()->truncate();
+        DB::table('user_peer_evaluation')->truncate();
+        DB::table('user_criterion')->truncate();
+
         return redirect()->route('home');
     }
 
@@ -118,7 +137,6 @@ class SetupInstructorController extends Controller
         PeerEvaluation::query()->truncate();
         PeerEvaluationsTeamMember::query()->truncate();
         PeerEvaluationsTeam::query()->truncate();
-        DB::table('user_group')->truncate();
         DB::table('user_peer_evaluation')->truncate();
         DB::table('user_criterion')->truncate();
 
