@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Criterion;
 use App\Group;
+use App\Incident;
 use App\PeerEvaluation;
 use App\PeerEvaluationsTeam;
 use App\PeerEvaluationsTeamMember;
@@ -211,6 +212,11 @@ class PeerEvaluationsStudentController extends Controller
         if(!$user->hasSubmittedActivePeerEvaluation())
         {
             return redirect()->route('unauthorized');
+        }
+
+        if($id != PeerEvaluation::active()->id)
+        {
+            Incident::report($user, 'Manipulation of the ID parameter');
         }
 
         return view('student.peer_evaluations.show');

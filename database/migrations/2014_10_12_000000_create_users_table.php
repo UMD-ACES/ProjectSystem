@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('dirID');
             $table->string('type')->default(\App\User::$student);
+            $table->string('remember_token');
             $table->timestamps();
         });
     }

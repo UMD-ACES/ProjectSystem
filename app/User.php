@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Auth;
 use Subfission\Cas\Facades\Cas;
 
 class User extends Authenticatable
@@ -28,7 +29,13 @@ class User extends Authenticatable
      */
     public static function get()
     {
-        return User::where('dirID', Cas::user())->first();
+        if(!Auth::check())
+        {
+            Cas::authenticate();
+        }
+
+
+        return Auth::user();
     }
 
     /* --------------- Roles --------------- */

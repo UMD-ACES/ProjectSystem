@@ -26,25 +26,24 @@ Route::get('/', function () {
 
     \App\Incident::report($user, 'No access to the application');
     return view('unauthorized');
-})->name('home');
+})->name('home')
+    ->middleware('cas.auth');
 
 Route::get('/unauthorized', function() {
    return view('unauthorized');
-})->name('unauthorized');
+})->name('unauthorized')
+    ->middleware('cas.auth');
 
 
 /* CAS */
-Route::get('logout', function() {
-    \Illuminate\Support\Facades\Session::flush();
-    \Illuminate\Support\Facades\Auth::logout();
-    \Subfission\Cas\Facades\Cas::logout();
-})->name('logout');
+Route::get('logout', 'AuthController@logout')->name('logout');
 
 
 /* Authenticated as an Admin */
 Route::group(['prefix' => 'admin/setup',
               'as' => 'Admin.Setup.',
               'middleware' => [
+                  'cas.auth',
                   'admin',
               ],
 ], function() {
@@ -67,6 +66,7 @@ Route::group(['prefix' => 'admin/setup',
 Route::group(['prefix' => 'admin',
               'as' => 'Admin.',
               'middleware' => [
+                  'cas.auth',
                   'admin',
                   'system.isReady',
               ],
@@ -90,6 +90,7 @@ Route::group(['prefix' => 'admin',
 Route::group(['prefix' => 'student',
               'as' => 'Student.',
               'middleware' => [
+                  'cas.auth',
                   'student',
                   'system.isReady',
                   'student.isReady'
@@ -114,6 +115,7 @@ Route::group(['prefix' => 'student',
 Route::group(['prefix' => 'student',
               'as' => 'Student.Setup.',
               'middleware' => [
+                  'cas.auth',
                   'student',
                   'system.isReady',
               ],

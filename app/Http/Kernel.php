@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CASAuth;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckStudent;
 use App\Http\Middleware\CheckStudentSetup;
@@ -23,7 +24,6 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrustProxies::class,
-        \App\Http\Middleware\CASAuth::class,
     ];
 
     /**
@@ -36,10 +36,11 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
-            // \Illuminate\Session\Middleware\AuthenticateSession::class,
+             //\Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            CASAuth::class
         ],
         'api' => [
             'throttle:60,1',
@@ -63,7 +64,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'cas.auth'  => \Subfission\Cas\Middleware\CASAuth::class,
+        'cas.auth'  => CASAuth::class,
         'cas.guest' => \Subfission\Cas\Middleware\RedirectCASAuthenticated::class,
         'system.isReady' => CheckSystemSetup::class,
         'admin' => CheckAdmin::class,
