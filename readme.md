@@ -16,6 +16,7 @@
 8. Run "php artisan app:addAdminUser {name} {directoryID}"
 9. Run "php artisan app:addCriterion {criterion}" for each peer evaluation criterion
 10. Run "php artisan app:addTechnicalCategory {category}" for each technical log category.
+11. Open ".env", set APP_ENV to "production" and set APP_DEBUG to "false"
 11. Go to <site>/setup.php
 
 ## Recommended
