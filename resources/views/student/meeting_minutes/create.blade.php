@@ -65,17 +65,17 @@
         <div class="form-group">
             <label for="start">Start Time:</label>
             @if(old('start'))
-                <input type="datetime-local" class="form-control" name="start" id="start" value="{{ old('start') }}" step="1"/>
+                <input type="text" class="form-control form_datetime" name="start" id="start" value="{{ old('start') }}" step="1"/>
             @else
-                <input type="datetime-local" class="form-control" name="start" id="start" value="{{ (\Carbon\Carbon::now())->format('Y-m-d\TH:i:s') }}" step="1" />
+                <input type="text" class="form-control form_datetime" name="start" id="start" value="{{ (\Carbon\Carbon::now())->format('Y-m-d H:i:s') }}" />
             @endif
         </div>
         <div class="form-group">
             <label for="end">End Time:</label>
             @if(old('end'))
-                <input type="datetime-local" class="form-control" name="end" id="end" value="{{ old('end') }}" step="1"/>
+                <input type="text" size="16" class="form-control form_datetime" name="end" id="end" value="{{ old('end') }}" step="1"/>
             @else
-                <input type="datetime-local" class="form-control" name="end" id="end" value="{{ (\Carbon\Carbon::now())->addHour()->format('Y-m-d\TH:i:s') }}" step="1" />
+                <input type="text" size="16" class="form-control form_datetime" name="end" id="end" value="{{ (\Carbon\Carbon::now())->addHour()->format('Y-m-d H:i:s') }}" />
             @endif
         </div>
         <p class="sectionTitle">Meeting Items</p>
@@ -108,9 +108,9 @@
         <div class="form-group">
             <label for="nextMeeting">Next Meeting Date and Time:</label>
             @if(old('nextMeeting'))
-                <input type="datetime-local" class="form-control" name="nextMeeting" id="nextMeeting" value="{{ old('nextMeeting') }}" step="1"/>
+                <input type="text" class="form-control form_datetime" name="nextMeeting" id="nextMeeting" value="{{ old('nextMeeting') }}"/>
             @else
-                <input type="datetime-local" class="form-control" name="nextMeeting" id="nextMeeting" value="" step="1" />
+                <input type="text" class="form-control form_datetime" name="nextMeeting" id="nextMeeting"  />
             @endif
         </div>
 
@@ -137,10 +137,24 @@
                 placeholder: "Absent Members"
             });
 
+            $("#start").datetimepicker({
+                format: 'yyyy-mm-dd hh:ii:ss'
+            });
+
+            $("#end").datetimepicker({
+                format: 'yyyy-mm-dd hh:ii:ss'
+            });
+
+
+            $("#nextMeeting").datetimepicker({
+                format: 'yyyy-mm-dd hh:ii:ss'
+            });
+
             createClassicEditor('notes');
             createClassicEditor('actionItems');
             createReadOnlyEditor('previousActionItems');
         }
+
 
 
     </script>

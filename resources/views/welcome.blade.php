@@ -50,6 +50,7 @@
                 <thead>
                 <tr>
                     <th>Meeting</th>
+                    <th>Group</th>
                     <th>Category</th>
                     <th>Completed_at</th>
                 </tr>
@@ -58,6 +59,7 @@
                 @foreach(\App\TechnicalLog::all() as $technicalLog)
                     <tr>
                         <td><a href="{{ route('Admin.technical_logs.show', $technicalLog->id) }}">Access</a></td>
+                        <td>{{ $technicalLog->group->name }}</td>
                         <td>{{ $technicalLog->category->name }}</td>
                         <td>{{ (new Carbon\Carbon($technicalLog->completed_at))->toDayDateTimeString()  }}</td>
                     </tr>

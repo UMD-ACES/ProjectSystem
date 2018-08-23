@@ -49,9 +49,9 @@
         <div class="form-group">
             <label for="completed_at">Completed At:</label>
             @if(old('completed_at'))
-                <input type="datetime-local" class="form-control" name="completed_at" id="completed_at" value="{{ old('completed_at') }}" step="1"/>
+                <input type="text" class="form-control" name="completed_at" id="completed_at" value="{{ old('completed_at') }}"/>
             @else
-                <input type="datetime-local" class="form-control" name="completed_at" id="completed_at" value="{{ (\Carbon\Carbon::now())->format('Y-m-d\TH:i:s') }}" step="1" />
+                <input type="text" class="form-control" name="completed_at" id="completed_at" value="{{ (\Carbon\Carbon::now())->format('Y-m-d H:i:s') }}" />
             @endif
         </div>
         <div class="form-group">
@@ -76,6 +76,10 @@
         {
             $('#category').select2({
                 placeholder: "Category"
+            });
+
+            $('#completed_at').datetimepicker({
+                format: 'yyyy-mm-dd hh:ii:ss'
             });
 
             createClassicEditor('description');
