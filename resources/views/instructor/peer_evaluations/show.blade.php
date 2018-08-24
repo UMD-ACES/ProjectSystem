@@ -33,7 +33,7 @@
         <table id="contribution_grades">
             <thead>
                 <tr>
-                    <th>From - To</th>
+                    <th>From Row - To Column</th>
                     @foreach($peerEvaluation->getAllTeamMembers($group) as $teamMember)
                         <th>{{ $teamMember->name }}</th>
                     @endforeach
