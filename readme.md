@@ -10,14 +10,15 @@
 3. Go to /var/www/html/ProjectSystem
 4. Run "php composer.phar install"
 5. Run "php artisan key:generate"
-5. Setup the DB connection in .env (may need to create a DB)
-6. In .env, setup the CAS_VALIDATION variable to be "ca" and the CAS_CERT variable to the path of the CA certificate (instructions in config/cas.php)
+6. Setup the DB connection in .env (may need to create a DB)
 7. Run "php artisan migrate"
 8. Run "php artisan app:addAdminUser {name} {directoryID}"
 9. Run "php artisan app:addCriterion {criterion}" for each peer evaluation criterion
 10. Run "php artisan app:addTechnicalCategory {category}" for each technical log category.
-11. Open ".env", set APP_ENV to "production" and set APP_DEBUG to "false"
-11. Go to <site>/setup.php
+11. SECURITY (mandatory): In .env, setup the CAS_VALIDATION variable to be "ca" and the CAS_CERT variable to the path of the CA certificate (instructions in config/cas.php)
+12. SECURITY (mandatory): Open ".env", set APP_ENV to "production" and set APP_DEBUG to "false"
+13. SECURITY (recommended): Disable phpmyadmin with "sudo a2disconf phpmyadmin.conf && sudo /etc/init.d/apache2 restart"
+14. Go to <site>/setup.php
 
 ## Recommended
 Turn off password authentication and solely allow publickey authentication
