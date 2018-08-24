@@ -21,7 +21,7 @@
             <table id="meetingMinutes">
                 <thead>
                     <tr>
-                        <th>Meeting</th>
+                        <th>Access</th>
                         <th>Group</th>
                         <th>Creator</th>
                         <th>Start</th>
@@ -49,7 +49,7 @@
             <table id="technicalLogs">
                 <thead>
                 <tr>
-                    <th>Meeting</th>
+                    <th>Access</th>
                     <th>Group</th>
                     <th>Category</th>
                     <th>Completed_at</th>
@@ -103,7 +103,7 @@
             <table id="meetingMinutes">
                 <thead>
                     <tr>
-                        <th>Meeting</th>
+                        <th>Access</th>
                         <th>Start</th>
                         <th>End</th>
                         <th>Duration</th>
@@ -130,7 +130,7 @@
             <table id="technicalLogs">
                 <thead>
                 <tr>
-                    <th>Meeting</th>
+                    <th>Access</th>
                     <th>Category</th>
                     <th>Completed_at</th>
                 </tr>
@@ -180,16 +180,26 @@
 
     @if($user->isAdmin())
         <script>
-            $('#peerEvaluations').DataTable();
-            $('#meetingMinutes').DataTable();
-            $('#technicalLogs').DataTable();
+            $('#peerEvaluations').DataTable({
+                "order": [[ 2, "desc" ]]
+            });
+            $('#meetingMinutes').DataTable({
+                "order": [[ 3, "desc" ]]
+            });
+            $('#technicalLogs').DataTable({
+                "order": [[ 3, "desc" ]]
+            });
         </script>
     @endif
 
     @if($user->isStudent())
         <script>
-            $('#meetingMinutes').DataTable();
-            $('#technicalLogs').DataTable();
+            $('#meetingMinutes').DataTable({
+                "order": [[ 1, "desc" ]]
+            });
+            $('#technicalLogs').DataTable({
+                "order": [[ 2, "desc" ]]
+            });
         </script>
     @endif
 
