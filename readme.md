@@ -4,6 +4,15 @@
 
 - Must be in the user table to have access to the application
 
+## Preliminary Setup:
+- MySQL, PHP7 and Apache2. Recommended: https://www.howtoforge.com/tutorial/install-apache-with-php-and-mysql-on-ubuntu-16-04-lamp/
+- Go to /var/www/html/
+- git clone https://github.com/UMD-ACES/ProjectSystem.git
+- Edit your SSL VirtualHost file. Mine is located here: "/etc/apache2/sites-enabled/default-ssl.conf"
+- Change "DocumentRoot /var/www/html/" to "DocumentRoot /var/www/html/ProjectSystem"
+- Add "ServerName <domain>" where <domain> is your domain
+- Restart Apache
+
 ## Setup
 1. Become root
 2. Make sure to change the default OS and DB password that this application is running on. 
