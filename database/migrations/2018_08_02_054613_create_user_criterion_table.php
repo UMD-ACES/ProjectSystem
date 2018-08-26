@@ -31,6 +31,6 @@ class CreateUserCriteriaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_criteria');
+        Schema::dropIfExists('user_criterion');
     }
 }
