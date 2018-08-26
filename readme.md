@@ -18,6 +18,7 @@
 2. Make sure to change the default OS and DB password that this application is running on. 
 3. Go to /var/www/html/ProjectSystem
 4. Run "php composer.phar install"
+5. Run "cp .env.example .env"
 5. Run "php artisan key:generate"
 6. Setup the DB connection in .env (may need to create a DB)
 7. Run "php artisan migrate"
