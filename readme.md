@@ -10,7 +10,7 @@
 - git clone https://github.com/UMD-ACES/ProjectSystem.git
 - Edit your SSL VirtualHost file. Mine is located here: "/etc/apache2/sites-enabled/default-ssl.conf"
 - Change "DocumentRoot /var/www/html/" to "DocumentRoot /var/www/html/ProjectSystem"
-- Add "ServerName <domain>" where <domain> is your domain
+- Add "ServerName (domain)" where (domain) is your domain
 - Restart Apache
 
 ## Setup
