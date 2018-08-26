@@ -23,7 +23,8 @@
             <li>Sign into Canvas/ELMS by going to myelms.umd.edu</li>
             <li>Go to the HACSXXX Class Page</li>
             <li>At the end of the URL or in the URL, there is a large number (aka course number), copy this number</li>
-            <li>Go to https://myelms.umd.edu/api/v1/courses/{{ '<course number>' }}/students</li>
+            <li>Go to https://<strong>myelms.umd.edu</strong>/api/v1/courses/{{ '<course number>' }}/students</li>
+            <li>The URL may be instead https://<strong>umd.instructure.com</strong>/api/v1/courses/{{ '<course number>' }}/students</li>
             <li>Copy paste the contents in that URL to the box below</li>
         </ol>
         <div class="form-group">
@@ -32,7 +33,8 @@
         </div>
 
         <ol>
-            <li>Go to https://myelms.umd.edu/api/v1/courses/{{ '<course number>' }}/groups?per_page=100&page=1</li>
+            <li>Go to https://<strong>myelms.umd.edu</strong>/api/v1/courses/{{ '<course number>' }}/groups?per_page=100&page=1</li>
+            <li>The URL may be instead https://<strong>umd.instructure.com</strong>/api/v1/courses/{{ '<course number>' }}/students</li>
             <li>Copy paste the contents in that URL to the box below</li>
         </ol>
         <div class="form-group">
