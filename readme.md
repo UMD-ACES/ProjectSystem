@@ -9,7 +9,8 @@
 - Go to /var/www/html/
 - git clone https://github.com/UMD-ACES/ProjectSystem.git
 - Edit your SSL VirtualHost file. Mine is located here: "/etc/apache2/sites-enabled/default-ssl.conf"
-- Change "DocumentRoot /var/www/html/" to "DocumentRoot /var/www/html/ProjectSystem/public". Don't forget to enable mod_rewrite
+- Change "DocumentRoot /var/www/html/" to "DocumentRoot /var/www/html/ProjectSystem/public". 
+- Don't forget to enable mod_rewrite (a2enmod rewrite) and set AllowOverride to "All" for Directory /var/www/.
 - Add "ServerName (domain)" where (domain) is your domain
 - Restart Apache
 
