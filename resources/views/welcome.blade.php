@@ -39,7 +39,7 @@
                             <td>{{ (new Carbon\Carbon($meetingMinute->start))->toDayDateTimeString() }}</td>
                             <td>{{ (new Carbon\Carbon($meetingMinute->end))->toDayDateTimeString() }}</td>
                             <td>{{ ((new \Carbon\Carbon($meetingMinute->end))->diffInHours(new \Carbon\Carbon($meetingMinute->start))) }}:{{ ((new \Carbon\Carbon($meetingMinute->end))->diff(new \Carbon\Carbon($meetingMinute->start)))->format('%I:%S') }}</td>
-                            <td>{{ (new Carbon\Carbon($meetingMinute->created_at))->toDayDateTimeString() }}</td>
+                            <td>{{ (new Carbon\Carbon($meetingMinute->created_at))->toDateTimeString() }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -163,7 +163,7 @@
             @elseif(\App\PeerEvaluation::isOneActive() && $user->getSubmittedActivePeerEvaluation()->pivot->display_to_user)
                 <p style="text-align: center;">
                     <a href="{{ route('Student.peer_evaluations.show', \App\PeerEvaluation::active()->id) }}" class="btn btn-primary">Save your most recent peer evaluation</a><br/><br/>
-                    <a href="{{ route('Student.peer_evaluations.edit', \App\PeerEvaluation::active()->id) }}" class="btn btn-primary">Uploaded to ELMS</a>
+                    <a href="{{ route('Student.peer_evaluations.edit', \App\PeerEvaluation::active()->id) }}" class="btn btn-primary" onclick="return confirm('Are you sure you downloaded the PDF and submitted it on ELMS? This is not done automatically for you.')">Uploaded to ELMS</a>
                 </p>
             @elseif(\App\PeerEvaluation::isOneActive() && $user->getSubmittedActivePeerEvaluation()->pivot->display_to_user == 0)
                 <p style="text-align: center;color:green;"><strong>Submitted</strong></p>
