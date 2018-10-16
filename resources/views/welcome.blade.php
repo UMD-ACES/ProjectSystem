@@ -163,7 +163,7 @@
             @elseif(\App\PeerEvaluation::isOneActive() && $user->getSubmittedActivePeerEvaluation()->pivot->display_to_user)
                 <p style="text-align: center;">
                     <a href="{{ route('Student.peer_evaluations.show', \App\PeerEvaluation::active()->id) }}" class="btn btn-primary">Save your most recent peer evaluation</a><br/><br/>
-                    <a href="{{ route('Student.peer_evaluations.edit', \App\PeerEvaluation::active()->id) }}" class="btn btn-primary" onclick="return confirm('Are you sure you downloaded the PDF and submitted it on ELMS? This is not done automatically for you.')">Uploaded to ELMS</a>
+                    <a href="{{ route('Student.peer_evaluations.edit', \App\PeerEvaluation::active()->id) }}" class="btn btn-primary" onclick="return confirm('Are you sure you downloaded the PDF and submitted it on ELMS? This is not done automatically for you.')">I have uploaded the PDF to ELMS</a>
                 </p>
             @elseif(\App\PeerEvaluation::isOneActive() && $user->getSubmittedActivePeerEvaluation()->pivot->display_to_user == 0)
                 <p style="text-align: center;color:green;"><strong>Submitted</strong></p>
