@@ -40,7 +40,8 @@ class PeerEvaluation extends Model
      */
     public function getTeamMembers(Group $group)
     {
-        $teamMembersIDGroupForm = $this->groups()
+        // Gets all the team members that have submitted the peer evaluation
+        $teamMembersIDGroupForm = $this->peerEvaluationsTeam()
             ->where('group_id', $group->id)
             ->get();
 
@@ -49,7 +50,7 @@ class PeerEvaluation extends Model
 
         foreach ($teamMembersIDGroupForm as $teamMember)
         {
-            $teamMembers[] = User::query()->find($teamMember->pivot->user_id);
+            $teamMembers[] = User::query()->find($teamMember->user_id);
         }
 
         return $teamMembers;
@@ -99,6 +100,65 @@ class PeerEvaluation extends Model
         $teamMembers = $teamMembers->unique()->values();
 
         return $teamMembers;
+    }
+
+
+    /**
+     * Returns individual score out of 100% based on the scores provided by the team members
+     * (including the score provided to him/herself)
+     *
+     * If the world was perfect, then it is possible to simply add the scores given for an individual
+     * but since some students do not fill out their peer evaluations, then I must compute the
+     * individual score based on the number who filled out the peer evaluations
+     *
+     * 100% contribution >= 100 / # team Members who submitted the peer evaluations
+     *
+     * @param User $user
+     * @return null
+     */
+    function computeTeamMemberScore(User $user)
+    {
+        /** @var Group $group */
+        $group = $user->group;
+
+        if($group == null)
+        {
+            return null;
+        }
+
+        $submittedGroupMembers = $this->getTeamMembers($group);
+
+        // Addition of all the scores
+        $userScore = 0;
+        /** @var User $groupMember */
+        foreach ($submittedGroupMembers as $groupMember)
+        {
+            if($groupMember->getSubmittedPeerEvaluationTeamMember($this, $user) != null)
+            {
+                $userScore += $groupMember->getSubmittedPeerEvaluationTeamMember($this, $user)->grade;
+                //echo 'Score:'.$groupMember->name.':'.$groupMember->getSubmittedPeerEvaluationTeamMember($this, $user)->grade.'<br/>';
+            }
+        }
+
+        // Average score
+        $userScore = $userScore / $submittedGroupMembers->count();
+        //echo 'User Score Total:'.$userScore.'<br/>';
+
+        $allGroupMembers = $this->getAllTeamMembers($group);
+        // 100% contribution score
+        $fullContributionScore = 100 / $allGroupMembers->count();
+        //echo 'Full Contribution Score:'.$fullContributionScore.'<br/>';
+
+        // Actual score
+        $score = round(($userScore / $fullContributionScore) * 100, 2);
+        //echo 'Actual Score:'.$score.'<br/>';
+
+        if($score > 100)
+        {
+            $score = 100;
+        }
+
+        return $score;
     }
 
 

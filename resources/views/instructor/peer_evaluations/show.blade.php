@@ -1,6 +1,5 @@
 @extends('layouts.app')
 <?php /** @var \App\PeerEvaluation $peerEvaluation */ ?>
-<?php /** @var \App\User $teamMember */ ?>
 
 @section('stylesheets')
     <style>
@@ -52,6 +51,12 @@
                         @endforeach
                     </tr>
                 @endforeach
+                <tr>
+                    <td><strong>Z - Computed Individual Score</strong></td>
+                    @foreach($peerEvaluation->getAllTeamMembers($group) as $teamMember)
+                        <td>{{ $peerEvaluation->computeTeamMemberScore($teamMember) }}%</td>
+                    @endforeach
+                </tr>
             </tbody>
         </table>
         <br/>

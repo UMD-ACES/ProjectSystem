@@ -78,6 +78,10 @@ Route::group(['prefix' => 'admin',
 
     /* Peer Evaluations */
     Route::resource('peer_evaluations', 'PeerEvaluationsInstructorController');
+    Route::get('peer_evaluations/individual_grades/form', 'PeerEvaluationsInstructorController@individual_grades_form')
+        ->name('peer_evaluations.individual_grades.form');
+    Route::post('peer_evaluations/individual_grades/compute', 'PeerEvaluationsInstructorController@individual_grades')
+        ->name('peer_evaluations.individual_grades.compute');
 
     /* Meeting Minutes */
     Route::resource('meeting_minutes', 'MeetingMinutesInstructorController');

@@ -15,8 +15,7 @@ class Group extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\User', 'user_group')
-            ->withPivot('peer_evaluation_id');
+        return $this->hasMany('App\User', 'group_id');
     }
 
     public function technicalLogs()

@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Subfission\Cas\Facades\Cas;
 
@@ -115,6 +116,20 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    function individualScore(Collection $peerEvaluations)
+    {
+        $score = 0;
+        /** @var PeerEvaluation $peerEvaluation */
+        foreach($peerEvaluations as $peerEvaluation)
+        {
+            $score += $peerEvaluation->computeTeamMemberScore($this);
+        }
+
+        $score = $score / $peerEvaluations->count();
+
+        return $score;
+    }
+
     function meetingMinute()
     {
         return $this->hasMany('App\MeetingMinute');
@@ -213,8 +228,6 @@ class User extends Authenticatable
     {
         return $this->peerEvaluations()->where('active', 1)->count() > 0;
     }
-
-
 
 
 

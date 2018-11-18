@@ -90,11 +90,15 @@
 
             @if(\App\Group::isSetup() || \App\User::isSetup())
                 <a href="{{ route('Admin.peer_evaluations.create') }}" class="btn btn-primary">Create a new peer evaluation</a>
+                <a href="{{ route('Admin.peer_evaluations.individual_grades.form') }}" class="btn btn-primary">Individual Grades</a>
                 <a href="{{ route('Admin.Setup.Reset') }}" class="btn btn-danger" onclick="return confirm('Are you want to reset the entire setup?\nThe entire database contents will be DELETED')">Reset Setup</a>
                 <a href="{{ route('Admin.Setup.Refresh') }}" class="btn btn-danger" onclick="return confirm('Are you want to delete all peer evaluations?\nThis action is irreversible')">Delete Peer Evaluations</a>
             @else
                 <a href="{{ route('Admin.Setup.Form') }}" class="btn btn-primary">Setup</a>
             @endif
+
+
+
             <!-- End of Peer Evaluation -->
 
         @elseif($user->isStudent())

@@ -7,6 +7,10 @@ use App\Incident;
 use App\PeerEvaluation;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
+use League\Csv\Reader;
+use League\Csv\Writer;
 
 class PeerEvaluationsInstructorController extends Controller
 {
@@ -100,6 +104,173 @@ class PeerEvaluationsInstructorController extends Controller
         return view('instructor.peer_evaluations.show')
             ->with('peerEvaluation', $peerEvaluation)
             ->with('group', $group);
+
+    }
+
+    /**
+     *
+     */
+    public function individual_grades_form()
+    {
+        $user = User::get();
+
+        if(!$user->isAdmin())
+        {
+            Incident::report($user, 'CRITICAL - Admin Access Only - Trying to access the peer evaluation individual grades form');
+            return redirect()->route('unauthorized');
+        }
+
+        return view('instructor.peer_evaluations.individual_grades');
+    }
+
+    /**
+     *
+     */
+    public function individual_grades(Request $request)
+    {
+        $user = User::get();
+
+        if(!$user->isAdmin())
+        {
+            Incident::report($user, 'CRITICAL - Admin Access Only - Trying to access the peer evaluation individual grades');
+            return redirect()->route('unauthorized');
+        }
+
+        $this->validate($request, [
+            'peerEvaluations' => 'required|array',
+            'peerEvaluations.*' => 'numeric',
+            'gradebook' => 'required|file',
+            'group_column' => 'required|numeric',
+            'individual_column' => 'required|numeric'
+        ]);
+
+        // File Upload
+        $path = $request->file('gradebook')->store('gradebook');
+        $file_contents = Storage::get($path);
+
+        // Peer Evaluations Setup
+        $peerEvaluationsID = $request->input('peerEvaluations');
+        $peerEvaluations = new Collection();
+
+        foreach ($peerEvaluationsID as $peerEvaluationID)
+        {
+            $peerEvaluations->push(PeerEvaluation::query()->findOrFail($peerEvaluationID));
+        }
+
+        $csv = Reader::createFromString($file_contents);
+        $newCSV = Writer::createFromFileObject(new \SplTempFileObject());
+
+        $groupColumnID = $request->input('group_column');
+        $individualColumnID = $request->input('individual_column');
+        $groupColumn = null;
+        $individualColumn = null;
+        $directoryIDColumn = null;
+        $groupPointsPossible = null;
+        $individualPointsPossible = null;
+
+        $row = 0;
+        foreach ($csv as $record)
+        {
+            $column = 0;
+            $directoryID = null;
+            $groupPoints = null;
+
+            foreach ($record as $value)
+            {
+                if ($row == 0) {
+                    // Header
+                    if (strpos($value, $groupColumnID) !== false)
+                    {
+                        $groupColumn = $column;
+                    }
+                    else if (strpos($value, $individualColumnID) !== false)
+                    {
+                        $individualColumn = $column;
+                    }
+                    else if(strpos($value, 'Login ID') !== false)
+                    {
+                        $directoryIDColumn = $column;
+                    }
+                }
+                else if($row == 1)
+                {
+                    // Muted or not - doesn't matter - test that the program got the columns
+                    if($groupColumn == null)
+                    {
+                        echo 'Could not find group column. Try again';
+                        exit();                        
+                    }
+                    if($individualColumn == null)
+                    {
+                        echo 'Could not find individual column. Try again';
+                        exit();
+                    }
+                    if($directoryIDColumn == null)
+                    {
+                        echo 'Naming for the Directory ID column must have changed. Looking for hardcoded substring "Login ID" '.
+                        'so it must be changed in the file or in the application';
+                        exit();
+                    }
+                }
+                else if ($row == 2) {
+                    // Points Possible
+                    if($column == $groupColumn)
+                    {
+                        $groupPointsPossible = intval($value);
+                    }
+                    if($column == $individualColumn)
+                    {
+                        $individualPointsPossible = intval($value);
+                    }
+                }
+                else {
+                    // Data
+                    if($column == $directoryIDColumn)
+                    {
+                        $directoryID = $value;
+                    }
+
+                    if($column == $groupColumn)
+                    {
+                        $groupPoints = intval($value);
+                    }
+                }
+
+                $column++;
+            }
+
+            if($directoryID != null && $groupPoints != null)
+            {
+                /** @var User $user */
+                $user = User::query()->where('dirID', '=', $directoryID)->first();
+
+                if($user != null)
+                {
+                    $individualScore = $user->individualScore($peerEvaluations); // Percentage 0-100
+
+                    //echo 'Individual Score: '.$individualScore.'<br/>';
+                    //echo 'Group Points: '.$groupPoints.'<br/>';
+                    //echo 'Group Points Possible: '.$groupPointsPossible.'<br/>';
+                    $groupScoreOutOf100 = $groupPoints * (100 / $groupPointsPossible); // Percentage 0-100
+                    //echo 'Group Score Out of 100: '.$groupScoreOutOf100.'<br/>';
+
+                    $adjustedIndividualScore = $groupScoreOutOf100 / 100 * $individualScore / 100; // Multiply both values 0 - 1
+                    $adjustedIndividualScore = $adjustedIndividualScore * $individualPointsPossible; // 0 - Individual Points Possible
+
+
+                    $record[$individualColumn] = round($adjustedIndividualScore);
+                }
+            }
+
+            $newCSV->insertOne($record);
+            $row++;
+        }
+
+        $headers = [
+            'Content-type'        => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="gradebook.csv"',
+        ];
+        return response()->make($newCSV, 200, $headers);
 
     }
 
