@@ -216,11 +216,11 @@ class PeerEvaluationsInstructorController extends Controller
                     // Points Possible
                     if($column == $groupColumn)
                     {
-                        $groupPointsPossible = intval($value);
+                        $groupPointsPossible = floatval($value);
                     }
                     if($column == $individualColumn)
                     {
-                        $individualPointsPossible = intval($value);
+                        $individualPointsPossible = floatval($value);
                     }
                 }
                 else {
@@ -232,7 +232,7 @@ class PeerEvaluationsInstructorController extends Controller
 
                     if($column == $groupColumn)
                     {
-                        $groupPoints = intval($value);
+                        $groupPoints = floatval($value);
                     }
                 }
 
@@ -257,6 +257,7 @@ class PeerEvaluationsInstructorController extends Controller
                     $adjustedIndividualScore = $groupScoreOutOf100 / 100 * $individualScore / 100; // Multiply both values 0 - 1
                     $adjustedIndividualScore = $adjustedIndividualScore * $individualPointsPossible; // 0 - Individual Points Possible
 
+                    //echo 'Adjusted Score:'.$adjustedIndividualScore.'<br/>';
 
                     $record[$individualColumn] = round($adjustedIndividualScore);
                 }
