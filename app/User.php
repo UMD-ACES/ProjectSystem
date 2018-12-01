@@ -161,7 +161,7 @@ class User extends Authenticatable
      */
     function getSubmittedActivePeerEvaluationTeam()
     {
-        return $this->hasMany('App\PeerEvaluationsTeam')
+        return $this->peerEvaluationsTeam()
             ->where('peer_evaluation_id', PeerEvaluation::active()->id)
             ->first();
     }

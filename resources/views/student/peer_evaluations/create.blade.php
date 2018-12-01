@@ -17,6 +17,7 @@
 @section('content')
 
     <h1 style="text-align: center;">Peer Evaluation: {{ \App\PeerEvaluation::active()->name }}</h1>
+    <h2 style="text-align: center;">{!! \App\Instruction::getPeerEvaluationInstruction('overview') !!} </h2>
     <br/>
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -86,7 +87,7 @@
         <br/>
         <div class="form-group">
             <label for="team_evaluation">Evaluate your team:</label><br/>
-            <small>How well did your team work together? Explain in detail and provide examples if necessary. </small>
+            <small>{!! \App\Instruction::getPeerEvaluationInstruction('team_evaluation') !!} </small>
             <textarea class="form-control" name="team_evaluation" id="team_evaluation" style="height: 300px;">{{ old('team_evaluation') }}</textarea>
         </div>
 
@@ -98,7 +99,8 @@
                 <p class="sectionTitle">Evaluate yourself</p>
                 <!-- Grade Evaluation -->
                 <div class="form-group">
-                    <label for="grade_evaluation_{{ $user->id }}">Evaluate your own contribution to the team</label>
+                    <label for="grade_evaluation_{{ $user->id }}">Evaluate your own contribution to the team:</label><br/>
+                    <small>{!! \App\Instruction::getPeerEvaluationInstruction('self_evaluation') !!}</small>
                     <textarea class="form-control" name="grade_evaluation_{{ $user->id }}" id="grade_evaluation_{{ $user->id }}" rows="5">{{ old('grade_evaluation_'.$user->id) }}</textarea>
                 </div>
 
@@ -132,7 +134,8 @@
                     <p class="sectionTitle">Team Member: {{ \App\User::find($teamMemberID)->name }}<br/><small>Contribution: <span id="teamMemberInfoGrade_{{ $teamMemberID }}">@if(old('grade_member_'.$teamMemberID)) {{ old('grade_member_'.$teamMemberID) }}% @else TBD @endif</span></small></p>
 
                     <div class="form-group">
-                        <label for="grade_evaluation_{{ $teamMemberID }}">Evaluate your team member's contribution to the project</label>
+                        <label for="grade_evaluation_{{ $teamMemberID }}">Evaluate your team member's contribution to the project:</label><br/>
+                        <small>{!! \App\Instruction::getPeerEvaluationInstruction('team_member_evaluation') !!} </small>
                         <textarea class="form-control" name="grade_evaluation_{{ $teamMemberID }}" id="grade_evaluation_{{ $teamMemberID }}" rows="5">{{ old('grade_evaluation_'.$teamMemberID) }}</textarea>
                     </div>
 
@@ -237,7 +240,8 @@
 
             let grade_evaluation =
                 '<div class="form-group">\n' +
-                '   <label for="grade_evaluation_' + id + '">Evaluate your team member\'s contribution to the project</label>' +
+                '   <label for="grade_evaluation_' + id + '">Evaluate your team member\'s contribution to the project:</label><br/>' +
+                '<small>{!! str_replace("'", "\'", preg_replace("/[\n\r]/", '', \App\Instruction::getPeerEvaluationInstruction('team_member_evaluation'))) !!}</small>' +
                 '   <textarea class="form-control" name="grade_evaluation_' + id + '" id="grade_evaluation_' + id + '" rows="5"></textarea>' +
                 '</div>';
 
@@ -326,7 +330,7 @@
             height: 300,
             plugins: [
                 'advlist autolink link lists charmap print preview hr anchor pagebreak',
-                'searchreplace wordcount visualblocks visualchars code insertdatetime nonbreaking',
+                'searchreplace wordcount visualblocks visualchars code insert4 nonbreaking',
                 'save table contextmenu directionality emoticons paste textcolor'
             ],
             content_css: 'css/content.css',

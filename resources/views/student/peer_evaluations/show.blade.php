@@ -50,7 +50,8 @@
             <div class="sectionTitle"> Team Evaluation</div>
             <br/>
             <div class="form-group">
-                <small>How well did your team work together? Explain in detail and provide examples if necessary. </small>
+                <label for="team_evaluation">Evaluate your team:</label><br/>
+                <small>{!! \App\Instruction::getPeerEvaluationInstruction('team_evaluation') !!} </small>
                 <textarea class="form-control" id="team_evaluation"  style="background-color:white" readonly>{{ $user->getSubmittedActivePeerEvaluationTeam()->team_evaluation }}</textarea>
             </div>
         </div>
@@ -60,10 +61,19 @@
                 <br/><hr/><br/>
                 <p class="sectionTitle">Team Member: {{ $peerEvaluationsActiveTeamMember->teamMember->name }}<br/><small>Contribution: <span id="teamMemberInfoGrade_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}">{{ $peerEvaluationsActiveTeamMember->grade }}%</span></small></p>
 
-                <div class="form-group">
-                    <label for="grade_evaluation_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}">Evaluate your team member's contribution to the project</label>
-                    <textarea class="form-control" id="grade_evaluation_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}" style="background-color:white" readonly>{{ $peerEvaluationsActiveTeamMember->grade_evaluation  }}</textarea>
-                </div>
+                @if($user->id == $peerEvaluationsActiveTeamMember->teamMember->id)
+                    <div class="form-group">
+                        <label for="grade_evaluation_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}">Evaluate your own contribution to the team:</label><br/>
+                        <small>{!! \App\Instruction::getPeerEvaluationInstruction('self_evaluation') !!}</small>
+                        <textarea class="form-control" id="grade_evaluation_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}" readonly>{{ $peerEvaluationsActiveTeamMember->grade_evaluation  }}</textarea>
+                    </div>
+                @else
+                    <div class="form-group">
+                        <label for="grade_evaluation_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}">Evaluate your team member's contribution to the project:</label><br/>
+                        <small>{!! \App\Instruction::getPeerEvaluationInstruction('team_member_evaluation') !!} </small>
+                        <textarea class="form-control" id="grade_evaluation_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}" style="background-color:white" readonly>{{ $peerEvaluationsActiveTeamMember->grade_evaluation  }}</textarea>
+                    </div>
+                @endif
 
                 <!-- Participation Table -->
                 <table id="participation_table_{{ $peerEvaluationsActiveTeamMember->teamMember->id }}">
