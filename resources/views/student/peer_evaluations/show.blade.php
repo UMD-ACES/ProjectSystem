@@ -121,11 +121,12 @@
 
     <script>
         window.onload = function() {
+
             /*$("textarea").each(function(textarea) {
                 $(this).height( $(this)[0].scrollHeight );
             });*/
 
-            window.print();
+            //window.print();
         }
 
     </script>

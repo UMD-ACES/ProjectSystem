@@ -115,6 +115,9 @@
             let editor = CKEDITOR.replace( selector );
 
             editor.config.readOnly = true;
+            editor.config.autoGrow_onStartup = true;
+
+            //editor.config.height = '100%';
 
             /*ClassicEditor
                 .create( element, {
