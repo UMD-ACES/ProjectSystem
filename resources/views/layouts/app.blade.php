@@ -20,6 +20,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     <link href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet"/>
     <link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/ckeditor/toolbarconfigurator/lib/codemirror/neo.css">
     @yield('stylesheets')
 @endsection
 
@@ -58,7 +59,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
     <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <!--<script src="/js/tinymce/tinymce.min.js"></script>-->
-    <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+    <!--<script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>-->
+    <script src="/ckeditor/ckeditor.js"></script>
     <script src="/js/bootstrap-datetimepicker.min.js"></script>
     <!--<script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/inline/ckeditor.js"></script>-->
 
@@ -69,18 +71,21 @@
         {
             let element;
 
-            if(id === true)
+            /*if(id === true)
             {
                 element = document.querySelector('#' + selector);
             }
             else
             {
                 element = selector;
-            }
+            }*/
 
 
-            ClassicEditor
+            CKEDITOR.replace( selector );
+
+            /*ClassicEditor
                 .create( element, {
+                    extraPlugins: 'wordcount',
                     toolbar: toolBarSetting,
                 })
                 .then( editor => {
@@ -90,24 +95,28 @@
                 } )
                 .catch( error => {
                     console.error( error );
-                } );
+                } );*/
         }
 
         function createReadOnlyEditor(selector, id = true)
         {
             let element;
 
-            if(id === true)
+            /*if(id === true)
             {
                 element = document.querySelector('#' + selector);
             }
             else
             {
                 element = selector;
-            }
+            }*/
 
 
-            ClassicEditor
+            let editor = CKEDITOR.replace( selector );
+
+            editor.config.readOnly = true;
+
+            /*ClassicEditor
                 .create( element, {
                     toolbar: toolBarSetting,
                     //isReadOnly: true,
@@ -119,7 +128,7 @@
                 } )
                 .catch( error => {
                     console.error( error );
-                } );
+                } );*/
         }
     </script>
 
