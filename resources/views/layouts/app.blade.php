@@ -116,6 +116,7 @@
 
             editor.config.readOnly = true;
             editor.config.autoGrow_onStartup = true;
+            editor.config.autoGrow_bottomSpace = 50;
 
             //editor.config.height = '100%';
 
