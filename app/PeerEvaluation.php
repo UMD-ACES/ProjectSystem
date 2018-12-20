@@ -155,7 +155,7 @@ class PeerEvaluation extends Model
 
         if($score > 100)
         {
-            $score = 100;
+            //$score = 100;
         }
 
         return $score;

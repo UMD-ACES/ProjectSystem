@@ -259,6 +259,11 @@ class PeerEvaluationsInstructorController extends Controller
 
                     //echo 'Adjusted Score:'.$adjustedIndividualScore.'<br/>';
 
+                    if($adjustedIndividualScore > 100)
+                    {
+                        $adjustedIndividualScore = 100;
+                    }
+
                     $record[$individualColumn] = round($adjustedIndividualScore);
                 }
             }
