@@ -41,7 +41,7 @@ class CASAuth
                 return redirect()->route('unauthorized');
             }
 
-            $this->cas->authenticate();
+            $this->cas->forceAuthentication();
         }
 
         /** @var User $user */

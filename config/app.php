@@ -164,7 +164,9 @@ return [
         \Subfission\Cas\CasServiceProvider::class,
         //Xavrsl\Cas\CasServiceProvider::class,
 
-        \App\Providers\ComposerServiceProvider::class
+        \App\Providers\ComposerServiceProvider::class,
+
+        \Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class
     ],
 
     /*
